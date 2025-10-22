@@ -275,6 +275,45 @@
     .result-value {
         font-size: 20px;
     }
+
+    .detection-container {
+        margin: 70px auto 20px;
+        padding: 0 10px;
+    }
+
+    .preview-image {
+        max-height: 200px;
+    }
+
+    .upload-zone {
+        padding: 20px 10px;
+    }
+
+    /* 按钮优化 */
+    .btn-primary,
+    .btn-secondary {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    /* 卡片标题 */
+    .card-title,
+    .section-title {
+        font-size: 18px;
+    }
+
+    /* 结果卡片 */
+    .result-card {
+        padding: 12px;
+    }
+
+    .result-label {
+        font-size: 12px;
+    }
+
+    .result-value {
+        font-size: 18px;
+    }
 }
 
 /* ==========================================
@@ -304,6 +343,37 @@
     .pathology-report-section td {
         padding: 6px 4px;
     }
+
+    /* 病变类型显示优化 */
+    #reportDiseaseTypes {
+        font-size: 13px !important;
+    }
+
+    #reportDiseaseTypes p {
+        padding: 8px !important;
+        margin: 8px 0 !important;
+        font-size: 13px !important;
+        word-break: break-word;
+    }
+
+    #reportDiseaseTypes strong {
+        font-size: 14px !important;
+    }
+
+    .report-section {
+        padding: 10px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .report-section h3 {
+        font-size: 16px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .report-section h4 {
+        font-size: 14px !important;
+        margin-bottom: 8px !important;
+    }
 }
 
 /* ==========================================
@@ -325,6 +395,31 @@
 
     .image-box {
         width: 100%;
+    }
+
+    /* 检测结果图片优化 */
+    #segmentationImage,
+    #recognitionImage {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 300px;
+        object-fit: contain;
+    }
+
+    .result-image-container {
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    /* 检测结果展示区域 */
+    .detection-results-display {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .result-image-section {
+        width: 100% !important;
+        flex: none !important;
     }
 }
 
@@ -476,5 +571,90 @@
     .btn {
         padding: 10px 15px;
         font-size: 14px;
+    }
+}
+
+/* ==========================================
+   设备监控页面移动端优化
+   ========================================== */
+@media (max-width: 768px) {
+    /* 监控网格布局 */
+    .monitoring-grid,
+    .devices-grid,
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    /* 监控卡片 */
+    .monitor-card,
+    .device-card,
+    .stat-card {
+        padding: 15px !important;
+        margin-bottom: 15px;
+    }
+
+    /* 图表容器 */
+    .chart-container,
+    .graph-container {
+        height: 250px !important;
+        margin: 15px 0;
+    }
+
+    /* 状态指示器 */
+    .status-indicator {
+        font-size: 12px;
+    }
+
+    /* 设备列表 */
+    .device-list {
+        padding: 10px;
+    }
+
+    .device-item {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* 监控标题 */
+    .monitor-title,
+    .device-title {
+        font-size: 20px !important;
+    }
+
+    /* 数值显示 */
+    .monitor-value,
+    .stat-value {
+        font-size: 24px !important;
+    }
+
+    /* 监控页面容器 */
+    .monitoring-container {
+        padding: 15px !important;
+        margin-top: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* 超小屏幕设备监控优化 */
+    .monitor-card,
+    .device-card,
+    .stat-card {
+        padding: 12px !important;
+    }
+
+    .chart-container,
+    .graph-container {
+        height: 200px !important;
+    }
+
+    .monitor-value,
+    .stat-value {
+        font-size: 20px !important;
+    }
+
+    .device-item {
+        padding: 8px;
+        font-size: 13px;
     }
 }

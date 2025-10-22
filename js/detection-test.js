@@ -586,7 +586,7 @@ function updatePathologyReportForTestImage(data) {
         const cells = row.querySelectorAll('td');
         if (cells.length >= 2) {
             if (cells[0].textContent.includes('检测模型')) {
-                cells[1].textContent = 'MaskRCNN-LAPP';
+                cells[1].textContent = 'yolov8';
             }
             if (cells[0].textContent.includes('图像质量')) {
                 cells[1].textContent = '优良';

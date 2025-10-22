@@ -265,34 +265,143 @@
                 grid-template-columns: 1fr;
                 gap: 60px;
             }
-            
+
             .model-content {
                 padding-right: 0;
             }
         }
-        
+
         @media (max-width: 768px) {
-            .about-content-area,
+            /* 关于我们区域 */
+            .about-image-area {
+                height: 40vh;
+            }
+
+            .about-content-area {
+                height: auto;
+                padding: 30px 20px;
+            }
+
+            .about-title {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+
+            .about-text {
+                font-size: 14px;
+            }
+
+            /* 图片轮播区域 */
+            .section-gallery {
+                min-height: 50vh;
+            }
+
+            .gallery-container {
+                height: 50vh;
+            }
+
+            .gallery-indicators {
+                bottom: 20px;
+                gap: 10px;
+            }
+
+            .indicator-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .indicator-dot.active {
+                width: 20px;
+            }
+
+            /* 模型概述区域 */
             .section-model {
-                padding: 40px 30px;
+                padding: 40px 20px;
             }
-            
-            .about-title,
+
             .model-title {
-                font-size: 36px;
+                font-size: 28px;
+                margin-bottom: 30px;
             }
-            
-            .about-text,
+
+            .model-subtitle {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
             .model-description {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .model-feature {
+                font-size: 14px;
+                padding: 12px 0;
+            }
+
+            .model-feature i {
                 font-size: 16px;
             }
-            
+
+            /* 图片网格 */
             .image-row {
                 flex-direction: column;
+                gap: 20px;
             }
-            
+
             .model-image-box.small {
                 width: 100%;
+                height: 180px;
+            }
+
+            .model-image-box.large {
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* 超小屏幕优化 */
+            .about-image-area {
+                height: 30vh;
+            }
+
+            .about-content-area {
+                padding: 20px 15px;
+            }
+
+            .about-title,
+            .model-title {
+                font-size: 24px;
+            }
+
+            .about-text,
+            .model-description {
+                font-size: 13px;
+            }
+
+            .section-gallery {
+                min-height: 40vh;
+            }
+
+            .gallery-container {
+                height: 40vh;
+            }
+
+            .section-model {
+                padding: 30px 15px;
+            }
+
+            .model-subtitle {
+                font-size: 18px;
+            }
+
+            .model-feature {
+                font-size: 13px;
+            }
+
+            .model-image-box.small,
+            .model-image-box.large {
+                height: 150px;
             }
         }
     </style>
