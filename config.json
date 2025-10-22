@@ -1,0 +1,103 @@
+{
+  "app_name": "智护视界 - 眼部胬肉检测系统",
+  "version": "2.0.0",
+  "deployment": {
+    "platform": "BML-CodeLab",
+    "package_path": "/bushu2/nurou",
+    "use_relative_paths": true,
+    "port": 8080
+  },
+  "paths": {
+    "model_dir": "models/baseline2",
+    "pages_dir": "pages",
+    "static_dirs": {
+      "css": "css",
+      "js": "js",
+      "images": "images",
+      "fonts": "fonts"
+    },
+    "upload_dir": "uploads",
+    "results_dir": "results",
+    "logs_dir": "logs"
+  },
+  "model": {
+    "type": "instance_segmentation",
+    "framework": "PaddleX",
+    "classes": ["观察", "手术"],
+    "input_size": 640,
+    "padding_multiple": 32,
+    "confidence_threshold": 0.5,
+    "nms_threshold": 0.5
+  },
+  "api_endpoints": {
+    "health": "/api/health",
+    "status": "/api/status",
+    "detect": "/api/detect",
+    "upload": "/api/upload",
+    "history": "/api/history",
+    "result": "/api/result/<id>"
+  },
+  "frontend": {
+    "main_page": "index.html",
+    "detection_page": "pages/detection.html",
+    "test_page": "test_detection.html",
+    "resources": [
+      "css/style.css",
+      "css/detection.css",
+      "js/main.js",
+      "js/ai-detection.js",
+      "images/"
+    ]
+  },
+  "severity_rules": {
+    "normal": {
+      "condition": "total_instances == 0",
+      "label": "正常",
+      "recommendations": [
+        "未检测到明显病变",
+        "建议保持良好用眼习惯",
+        "定期进行眼科检查"
+      ]
+    },
+    "mild": {
+      "condition": "surgery_count == 0 && observation_count > 0",
+      "label": "轻度",
+      "recommendations": [
+        "检测到需要观察的病变",
+        "建议定期复查",
+        "使用人工泪液缓解症状",
+        "避免紫外线照射"
+      ]
+    },
+    "moderate": {
+      "condition": "surgery_count > 0 && surgery_count <= observation_count",
+      "label": "中度",
+      "recommendations": [
+        "检测到需要手术的病变",
+        "建议密切关注",
+        "考虑药物治疗控制炎症",
+        "每3个月复查一次"
+      ]
+    },
+    "severe": {
+      "condition": "surgery_count > observation_count",
+      "label": "重度",
+      "recommendations": [
+        "病变严重，可能影响视力",
+        "建议尽快手术治疗",
+        "术后规律用药",
+        "预防复发"
+      ]
+    }
+  },
+  "fallback": {
+    "use_mock_data": true,
+    "mock_probability": 0.5,
+    "mock_confidence_range": [0.7, 0.95]
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "logs/app.log"
+  }
+}

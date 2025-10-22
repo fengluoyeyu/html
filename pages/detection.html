@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI图像检测 - 明眸辨齿</title>
+    <link rel="stylesheet" href="../css/minimal-style.css">
+    <link rel="stylesheet" href="../css/footer-section.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0066cc;
+            --accent-green: #00a651;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --border-light: #e5e5e5;
+            --bg-secondary: #f8f9fa;
+            --gradient-primary: linear-gradient(135deg, #0066cc 0%, #00a6fb 100%);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
+            --shadow-xl: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        
+        body {
+            /* 背景颜色已修改：与系统介绍页面的模型概述部分保持一致 */
+            /* 原背景: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) */
+            /* 新背景: #0f0f0f (与intro.html第153行的.section-model背景色一致) */
+            background: rgb(57, 62, 69);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .detection-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .detection-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .detection-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            /* 文字颜色已修改：原color: var(--text-primary) 即 #1a1a1a */
+            /* 新颜色：蓝色 #0066cc (使用系统主题蓝色) */
+            /* 修改位置：detection.html 第45-50行 */
+            color: #2ca0ff;
+            margin-bottom: 1rem;
+        }
+        
+        .detection-subtitle {
+            /* 文字颜色已修改：原color: var(--text-secondary) 即 #666 */
+            /* 新颜色：蓝色 #0066cc (使用系统主题蓝色) */
+            /* 修改位置：detection.html 第52-55行 */
+            color: #ffffff;
+            font-size: 1.125rem;
+        }
+        
+        .detection-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .upload-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .upload-zone {
+            border: 3px dashed var(--border-light);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            background: var(--bg-secondary);
+        }
+        
+        .upload-zone.dragover {
+            border-color: var(--primary-blue);
+            background: rgba(0, 102, 204, 0.05);
+        }
+        
+        .upload-zone.has-file {
+            border-color: var(--accent-green);
+            background: rgba(0, 166, 81, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-hint {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            margin-top: 1.5rem;
+            padding: 0.75rem 2rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .preview-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .preview-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        .preview-area {
+            width: 100%;
+            height: 400px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preview-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .preview-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+        
+        .preview-image.active {
+            display: block;
+        }
+        
+        .detection-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
+        .detection-box {
+            position: absolute;
+            border: 2px solid var(--accent-green);
+            background: rgba(0, 166, 81, 0.1);
+        }
+        
+        .control-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+        
+        .control-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .control-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .control-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .control-value {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .control-slider {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .action-panel {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-detect {
+            padding: 1rem 3rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .btn-detect:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .btn-detect:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-reset {
+            padding: 1rem 2rem;
+            background: white;
+            color: var(--text-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-reset:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        
+        .results-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-top: 3rem;  /* 增加上间距，与上传图像区域间距保持一致 */
+            display: none;
+        }
+        
+        .results-section.active {
+            display: block;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .results-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 166, 81, 0.1);
+            color: var(--accent-green);
+            border-radius: 25px;
+            font-weight: 600;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .result-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        .result-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .result-unit {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-left: 0.25rem;
+        }
+        
+        .processing-indicator {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        .processing-indicator.active {
+            display: block;
+        }
+        
+        .processing-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border-light);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .processing-text {
+            font-size: 1.125rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .processing-subtext {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        /* 新增检测结果详细展示样式 */
+        .detection-results-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-top: 3rem;  /* 增加间距 */
+            display: none;
+        }
+        
+        .detection-results-container.active {
+            display: block !important;
+        }
+        
+        /* 确保结果区域能正确显示 */
+        #resultsSection {
+            display: none;
+        }
+        
+        #resultsSection.active {
+            display: block !important;
+        }
+        
+        #pathologyReport {
+            display: none;
+        }
+        
+        #pathologyReport.active {
+            display: block !important;
+        }
+        
+        .results-detail-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .results-detail-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .results-detail-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        /* 检测结果展示区域 - 左右布局 */
+        .detection-results-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* 左侧：病变区域图片 */
+        .lesion-image-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .lesion-image-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .lesion-image-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lesion-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .lesion-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
+        .lesion-mask {
+            position: absolute;
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid rgba(255, 0, 0, 0.8);
+        }
+        
+        /* 右侧：柱状图 */
+        .chart-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 350px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        #severityChart {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 病理报告区域 */
+        .pathology-report-section {
+            background: white;
+            border-radius: 16px;
+            padding: 0;  /* 去除内边距，为模板图片做准备 */
+            box-shadow: var(--shadow-lg);
+            margin-top: 3rem;  /* 增加间距 */
+            display: none;
+            position: relative;
+            overflow: hidden;
+            min-height: 800px;
+        }
+        
+        /* 病理报告模板背景 */
+        .report-template-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #f0f8ff 0%, #ffffff 10%);
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        /* 报告水印 */
+        .report-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 120px;
+            color: rgba(0, 102, 204, 0.05);
+            font-weight: bold;
+            z-index: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        /* 报告内容容器 */
+        .report-main-content {
+            position: relative;
+            z-index: 2;
+            padding: 3rem;
+            background: white;
+        }
+        
+        .pathology-report-section.active {
+            display: block;
+        }
+        
+        /* 打印样式 */
+        @media print {
+            /* 隐藏所有其他元素 */
+            body > *:not(.pathology-report-section) {
+                display: none !important;
+            }
+            
+            /* 隐藏不需要打印的部分 */
+            .navbar,
+            .hero-section,
+            .upload-section,
+            .results-section,
+            .detection-results-container,
+            .report-actions,
+            .btn-download-report,
+            .btn-print-report {
+                display: none !important;
+            }
+            
+            /* 显示病理报告 */
+            .pathology-report-section {
+                display: block !important;
+                position: relative !important;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            
+            .report-main-content {
+                padding: 20px !important;
+            }
+            
+            /* 隐藏背景和水印 */
+            .report-template-bg,
+            .report-watermark {
+                display: none !important;
+            }
+            
+            /* 调整字体大小 */
+            .pathology-report-section h1 {
+                font-size: 1.8rem !important;
+            }
+            
+            .pathology-report-section h2 {
+                font-size: 1.4rem !important;
+            }
+            
+            .pathology-report-section h3 {
+                font-size: 1.1rem !important;
+            }
+            
+            /* 确保表格正确显示 */
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            
+            td {
+                padding: 0.4rem !important;
+                border: 1px solid #000 !important;
+            }
+            
+            /* 分页设置 */
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+        }
+        
+        .report-header {
+            border-bottom: 3px solid var(--primary-blue);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .report-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .report-info {
+            display: flex;
+            gap: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .report-content {
+            line-height: 1.8;
+        }
+        
+        .report-section {
+            margin-bottom: 2rem;
+        }
+        
+        .report-section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        .report-section-content {
+            color: var(--text-secondary);
+            padding-left: 1.25rem;
+        }
+        
+        .report-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .report-metric {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .report-recommendation {
+            background: rgba(0, 102, 204, 0.05);
+            border-left: 4px solid var(--primary-blue);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .report-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .btn-download-report {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-download-report:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-print-report {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: var(--text-primary);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-print-report:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .detection-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .detection-results-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .detection-title {
+                font-size: 2rem;
+            }
+            
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-panel {
+                flex-direction: column;
+            }
+            
+            .btn-detect,
+            .btn-reset {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .report-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .report-actions {
+                flex-direction: column;
+            }
+            
+            .btn-download-report,
+            .btn-print-report {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-wrapper">
+            <a href="../index.html" class="nav-logo">
+                <img src="../images/logo.png" alt="AI智齿卫">
+                <span>明眸辨齿</span>
+            </a>
+            <div class="nav-links">
+                <a href="intro.html" class="nav-item">系统介绍</a>
+                <a href="detection.html" class="nav-item active">AI检测</a>
+                <a href="device-monitor.html" class="nav-item">设备监控</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="detection-container">
+        <div class="detection-header">
+            <h1 class="detection-title">曲面断层口腔健康AI检测系统</h1>
+            <p class="detection-subtitle">多模型融合，精准识别口腔健康状况</p>
+        </div>
+
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <h2 class="control-title"><i class="fas fa-sliders-h"></i> 检测参数设置</h2>
+            <div class="control-grid">
+                <div class="control-item">
+                    <label class="control-label">检测模型</label>
+                    <select class="control-value" id="model-select">
+                        <option value="instance_segmentation">实例分割模型</option>
+                        <option value="mask_rcnn">Mask R-CNN</option>
+                        <option value="yolo">YOLO-Seg</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">置信度阈值</label>
+                    <div class="control-value">
+                        <span id="confidence-value">0.7</span>
+                        <input type="range" class="control-slider" min="0" max="1" step="0.1" value="0.7" 
+                               oninput="document.getElementById('confidence-value').textContent = this.value">
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">NMS阈值</label>
+                    <div class="control-value">
+                        <span id="nms-value">0.5</span>
+                        <input type="range" class="control-slider" min="0" max="1" step="0.1" value="0.5"
+                               oninput="document.getElementById('nms-value').textContent = this.value">
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">图像增强</label>
+                    <select class="control-value">
+                        <option>自动</option>
+                        <option>关闭</option>
+                        <option>对比度增强</option>
+                        <option>亮度优化</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要内容区 -->
+        <div class="detection-main">
+            <!-- 上传区域 -->
+            <div class="upload-section">
+                <h2 class="preview-title"><i class="fas fa-upload"></i> 上传图像</h2>
+                <div class="upload-zone" id="uploadZone">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p class="upload-text">点击或拖拽图像到此处</p>
+                    <p class="upload-hint">支持 JPG、PNG、GIF、BMP 格式<br>文件大小不超过 20MB</p>
+                    
+                    <!-- 最简单的文件上传实现 -->
+                    <div style="margin-top: 20px;" onclick="event.stopPropagation();">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('fileInput').click(); event.stopPropagation();">
+                            <i class="fas fa-folder-open"></i> 选择本地文件
+                        </button>
+                        <input type="file" id="fileInput" accept="image/*" 
+                               style="display: none;" 
+                               onchange="window.handleFileSelect(this)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 预览区域 -->
+            <div class="preview-section">
+                <h2 class="preview-title"><i class="fas fa-image"></i> 图像预览</h2>
+                <div class="preview-area" id="previewArea">
+                    <div class="preview-placeholder">
+                        <i class="fas fa-tooth"></i>
+                        <p>等待上传图像</p>
+                    </div>
+                    <img class="preview-image" id="previewImage" alt="预览图像">
+                    <div class="detection-overlay" id="detectionOverlay"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="action-panel">
+            <button class="btn-detect" id="detectBtn" disabled>
+                <i class="fas fa-robot"></i>
+                开始检测
+            </button>
+            <button class="btn-reset" id="resetBtn">
+                <i class="fas fa-redo"></i>
+                重置
+            </button>
+            <button class="btn-reset" id="testBtn" style="background: #28a745; color: white; border-color: #28a745;">
+                <i class="fas fa-check"></i>
+                测试连接
+            </button>
+        </div>
+
+        <!-- 检测结果 -->
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2 class="results-title">检测结果</h2>
+                <div class="results-status">
+                    <i class="fas fa-check-circle"></i>
+                    检测完成
+                </div>
+            </div>
+            <div class="results-grid">
+                <div class="result-card">
+                    <p class="result-label">检测类型</p>
+                    <p class="result-value">
+                        <span id="detectionType">曲面断层牙齿分割与牙齿疾病识别</span>
+                    </p>
+                </div>
+                <div class="result-card">
+                    <p class="result-label">处理时间</p>
+                    <p class="result-value">
+                        <span id="timeResult">-</span>
+                        <span class="result-unit">ms</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 新增：检测结果详细展示 -->
+        <div class="detection-results-container" id="detectionResultsContainer">
+            <div class="results-detail-header">
+                <h2 class="results-detail-title">检测结果分析</h2>
+                <p class="results-detail-subtitle">基于多模型融合的智能分析结果</p>
+            </div>
+            
+            <div class="detection-results-content">
+                <!-- 左侧：牙齿分割展示 -->
+                <div class="lesion-image-section">
+                    <h3 class="lesion-image-title">
+                        <i class="fas fa-image"></i>
+                        牙齿分割展示
+                    </h3>
+                    <div class="lesion-image-container">
+                        <img class="lesion-image" id="segmentationImage" alt="牙齿分割结果">
+                        <div class="lesion-overlay" id="lesionOverlay"></div>
+                    </div>
+                </div>
+
+                <!-- 右侧：牙齿疾病识别展示 -->
+                <div class="chart-section">
+                    <h3 class="chart-title">
+                        <i class="fas fa-image"></i>
+                        牙齿疾病识别展示
+                    </h3>
+                    <div class="chart-container">
+                        <img class="lesion-image" id="recognitionImage" alt="牙齿疾病识别结果">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 病理报告 -->
+        <div class="pathology-report-section" id="pathologyReport">
+            <!-- 模板背景 -->
+            <div class="report-template-bg"></div>
+            
+            <!-- 水印 -->
+            <div class="report-watermark">明眸辨齿</div>
+            
+            <!-- 报告主体内容 -->
+            <div class="report-main-content">
+                <div class="report-header" style="text-align: center; border-bottom: 3px double #0066cc; padding-bottom: 2rem; margin-bottom: 2rem;">
+                    <h1 style="font-size: 2rem; color: #0066cc; margin-bottom: 1rem; letter-spacing: 0.5rem;">明眸辨齿医疗中心</h1>
+                    <h2 class="report-title" style="font-size: 1.5rem; margin-bottom: 1.5rem;">曲面断层口腔健康AI检测报告</h2>
+                    <div class="report-info" style="display: flex; justify-content: space-between; font-size: 0.875rem; color: #666;">
+                        <span><strong>报告编号：</strong><span id="reportId">RPT20240101001</span></span>
+                        <span><strong>检测日期：</strong><span id="reportDate">2024-01-01</span></span>
+                        <span><strong>打印时间：</strong><span id="printTime">2024-01-01 10:00</span></span>
+                    </div>
+                </div>
+            
+                <div class="report-content">
+                    <!-- 患者信息表格 -->
+                    <div class="report-section" style="margin-bottom: 2rem;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5; width: 15%;"><strong>姓名：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; width: 35%;" id="patientName">待输入</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5; width: 15%;"><strong>性别：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; width: 35%;" id="patientGender">待输入</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>年龄：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;" id="patientAge">待输入</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>病历号：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;" id="patientId">MR-2024-0001</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>检查部位：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">口腔全景</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>检查方法：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">曲面断层AI图像分析</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 检测信息 -->
+                    <div class="report-section" style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.125rem; color: #333; border-bottom: 2px solid #0066cc; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                            一、检测信息
+                        </h3>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5; width: 25%;"><strong>检测模型：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">PaddleDetection Mask R-CNN v2.0</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>图像质量：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">优良</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>置信度：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;"><span id="reportConfidence">95</span>%</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 检测结果 -->
+                    <div class="report-section" style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.125rem; color: #333; border-bottom: 2px solid #0066cc; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                            二、检测结果
+                        </h3>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5; width: 25%;"><strong>病变检出：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: bold; color: #ff4444;" id="reportDetection">阳性</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>病变类型：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;"><span id="reportArea">-</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>侵犯角膜缘：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;" id="reportInvasion">2.5 mm</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f5f5f5;"><strong>严重程度：</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: bold;" id="reportSeverity">中度</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 诊断意见 -->
+                    <div class="report-section" style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.125rem; color: #333; border-bottom: 2px solid #0066cc; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                            三、诊断意见
+                        </h3>
+                        <div style="padding: 1rem; background: #f9f9f9; border-left: 4px solid #0066cc; line-height: 1.8;">
+                            <p id="reportConclusion" style="margin: 0;">
+                                检测发现口腔存在健康问题，通过曲面断层影像分析显示异常区域。
+                                根据检测结果和位置判断需要进一步观察，
+                                建议定期复查并咨询专业口腔医师。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 临床建议 -->
+                    <div class="report-section" style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.125rem; color: #333; border-bottom: 2px solid #0066cc; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                            四、临床建议
+                        </h3>
+                        <div style="padding: 1rem; background: #fff8e1; border: 1px solid #ffd54f;">
+                            <ul id="reportRecommendations" style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+                                <li>建议进行详细的口腔检查，评估牙齿和牙龈健康状况</li>
+                                <li>定期进行口腔清洁和维护</li>
+                                <li>注意口腔卫生，早晚刷牙使用牙线</li>
+                                <li>避免过硬食物，减少对牙齿的损伤</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 医生签名区 -->
+                    <div class="report-section" style="margin-top: 3rem;">
+                        <table style="width: 100%; font-size: 0.95rem;">
+                            <tr>
+                                <td style="width: 50%; padding: 1rem;">
+                                    <p style="margin-bottom: 2rem;"><strong>检测医师：</strong>_______________</p>
+                                    <p><strong>审核医师：</strong>_______________</p>
+                                </td>
+                                <td style="width: 50%; text-align: right; padding: 1rem;">
+                                    <p style="margin-bottom: 2rem;"><strong>报告日期：</strong><span id="reportSignDate">2024-01-01</span></p>
+                                    <p style="color: #666; font-size: 0.85rem;">（本报告仅供临床参考）</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="report-actions" style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #ddd; text-align: center;">
+                    <button class="btn-download-report" onclick="downloadReport()">
+                        <i class="fas fa-download"></i>
+                        下载报告
+                    </button>
+                    <button class="btn-print-report" onclick="printReport()">
+                        <i class="fas fa-print"></i>
+                        打印报告
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 处理指示器 -->
+    <div class="processing-indicator" id="processingIndicator">
+        <div class="processing-spinner"></div>
+        <p class="processing-text">AI正在分析图像...</p>
+        <p class="processing-subtext">使用多模型进行智能分析</p>
+    </div>
+
+    <!-- 页脚半屏 -->
+    <section class="footer-section">
+        <div class="footer-container">
+            <div class="footer-header">
+                <img src="../images/logo.png" alt="AI智齿卫" class="footer-logo">
+                <h2 class="footer-title">明眸辨齿</h2>
+            </div>
+            <p class="footer-subtitle">AI智齿卫团队倾心力作</p>
+            <nav class="footer-nav">
+                <a href="intro.html" class="footer-nav-item">系统介绍</a>
+                <a href="detection.html" class="footer-nav-item">AI检测</a>
+                <a href="device-monitor.html" class="footer-nav-item">设备监控</a>
+            </nav>
+        </div>
+    </section>
+
+    <!-- 引入检测结果处理模块 -->
+    <script src="../js/detection-handler.js"></script>
+    <!-- 引入AI检测功能模块 -->
+    <script src="../js/ai-detection.js"></script>
+    <!-- 引入测试图片配置系统 -->
+    <script src="../test_images_config.js"></script>
+    <!-- 引入检测测试和修复脚本 -->
+    <script src="../js/detection-test.js"></script>
+    
+    <script>
+        // 添加调试信息
+        console.log('Detection page loaded');
+        console.log('Current URL:', window.location.href);
+        console.log('API base URL:', window.location.origin);
+        
+        // 创建调试面板
+        const debugPanel = document.createElement('div');
+        debugPanel.id = 'debugPanel';
+        debugPanel.style.cssText = 'position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999; max-width: 300px;';
+        debugPanel.innerHTML = '<strong>调试信息</strong><br>页面已加载<br>等待操作...';
+        document.body.appendChild(debugPanel);
+        
+        function debugLog(message) {
+            console.log(message);
+            if (debugPanel) {
+                debugPanel.innerHTML += '<br>' + new Date().toLocaleTimeString() + ': ' + message;
+                // 只保留最后10条消息
+                const lines = debugPanel.innerHTML.split('<br>');
+                if (lines.length > 12) {
+                    debugPanel.innerHTML = lines.slice(-12).join('<br>');
+                }
+            }
+        }
+        // 记录检测开始时间
+        window.detectionStartTime = 0;
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // 文件上传功能
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewImage = document.getElementById('previewImage');
+        const previewArea = document.getElementById('previewArea');
+        const detectBtn = document.getElementById('detectBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const resultsSection = document.getElementById('resultsSection');
+        const processingIndicator = document.getElementById('processingIndicator');
+        
+        // 保存当前文件
+        let currentFile = null;
+        
+        // 调试：检查元素是否存在
+        console.log('Elements check:', {
+            uploadZone: !!uploadZone,
+            fileInput: !!fileInput,
+            previewImage: !!previewImage,
+            detectBtn: !!detectBtn,
+            resetBtn: !!resetBtn,
+            selectFileBtn: !!selectFileBtn,
+            testBtn: !!document.getElementById('testBtn')
+        });
+        
+        // 如果文件输入存在，添加更详细的调试
+        if (fileInput) {
+            console.log('File input details:', {
+                accept: fileInput.accept,
+                multiple: fileInput.multiple,
+                disabled: fileInput.disabled,
+                style: fileInput.style.display
+            });
+        }
+        
+        // 拖拽上传
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+        
+        // 点击上传区域（但不包括label和按钮）
+        if (uploadZone) {
+            uploadZone.addEventListener('click', function(e) {
+                // 如果点击的是label、button或其内部元素，不处理
+                // 增加更严格的检查，避免重复触发
+                if (e.target.tagName === 'LABEL' || 
+                    e.target.tagName === 'BUTTON' ||
+                    e.target.tagName === 'INPUT' ||
+                    e.target.closest('label') ||
+                    e.target.closest('.upload-btn') ||
+                    e.target.closest('[for="fileInput"]')) {
+                    console.log('点击了按钮区域，不重复触发');
+                    return;
+                }
+                
+                // 额外检查：如果点击的元素在按钮的div容器内
+                if (e.target.closest('div[style*="margin-top: 20px"]')) {
+                    console.log('点击了按钮容器，不重复触发');
+                    return;
+                }
+                
+                console.log('点击上传区域背景');
+                if (fileInput) {
+                    fileInput.click();
+                }
+            });
+        }
+        
+        // 全局文件处理函数
+        window.handleFileSelect = function(input) {
+            console.log('文件选择事件触发');
+            const files = input.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                console.log('选择的文件:', file.name, file.type, file.size);
+                handleFile(file);
+            }
+        };
+        
+        // 备用：也绑定change事件 - 已注释，因为HTML中已有onchange
+        // if (fileInput) {
+        //     fileInput.addEventListener('change', function(e) {
+        //         console.log('备用事件触发');
+        //         window.handleFileSelect(this);
+        //     });
+        // }
+        
+        // 处理文件
+        function handleFile(file) {
+            console.log('处理文件:', file.name);
+            
+            // 简单的文件类型检查
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
+            const fileName = file.name.toLowerCase();
+            const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+            
+            // 检查MIME类型或文件扩展名
+            const isValidType = file.type && validTypes.includes(file.type.toLowerCase());
+            const hasValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
+            
+            if (!isValidType && !hasValidExtension) {
+                alert('请上传图片文件（支持 JPG、PNG、GIF、BMP、WebP 格式）');
+                return;
+            }
+            
+            // 检查文件大小（20MB）
+            if (file.size > 20 * 1024 * 1024) {
+                alert('文件大小不能超过20MB');
+                return;
+            }
+            
+            console.log('开始读取文件...');
+            window.detectionStartTime = new Date().getTime();
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                console.log('文件读取完成');
+                try {
+                    // 设置预览图片
+                    if (previewImage) {
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = 'block';
+                        previewImage.style.maxWidth = '100%';
+                        previewImage.style.height = 'auto';
+                        console.log('预览图片已设置');
+                    } else {
+                        console.error('预览图片元素不存在');
+                    }
+                    
+                    // 隐藏占位符
+                    const placeholder = document.querySelector('.preview-placeholder');
+                    if (placeholder) {
+                        placeholder.style.display = 'none';
+                    }
+                    
+                    // 启用检测按钮
+                    if (detectBtn) {
+                        detectBtn.disabled = false;
+                        console.log('检测按钮已启用');
+                    }
+                    
+                    // 保存当前文件
+                    currentFile = file;
+                    window.currentFile = file; // 也保存到全局
+                    console.log('文件已保存，可以开始检测');
+                } catch (err) {
+                    console.error('处理预览时出错:', err);
+                }
+            };
+            
+            reader.onerror = function(e) {
+                console.error('文件读取失败:', e);
+                alert('文件读取失败，请重试');
+            };
+            // 开始读取文件
+            try {
+                reader.readAsDataURL(file);
+                console.log('已开始读取文件为DataURL');
+            } catch (err) {
+                console.error('读取文件失败:', err);
+                alert('读取文件失败，请重试');
+            }
+        }
+        
+        
+        // 开始检测
+        if (detectBtn) {
+            detectBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                console.log('点击检测按钮');
+                alert('开始检测...'); // 测试是否触发
+            
+            if (!currentFile && !previewImage.src) {
+                alert('请先上传图片');
+                return;
+            }
+            
+            detectBtn.disabled = true;
+            processingIndicator.classList.add('active');
+            window.detectionStartTime = new Date().getTime();
+            
+            try {
+                console.log('准备发送检测请求...');
+                
+                // 获取检测参数
+                const confidenceThreshold = parseFloat(document.getElementById('confidence-value').textContent) || 0.4;
+                
+                let response;
+                
+                // 判断是测试图片还是上传的文件
+                if (currentFile && currentFile.isTest) {
+                    // 测试图片：发送图片路径
+                    console.log('使用测试图片:', currentFile.name);
+                    const detectUrl = '/api/detect';
+                    
+                    response = await fetch(detectUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            test_image: currentFile.serverPath,
+                            image_name: currentFile.name,
+                            confidence_threshold: confidenceThreshold,
+                            is_test: true
+                        })
+                    });
+                    console.log('测试图片请求已发送, 状态:', response.status);
+                } else if (currentFile) {
+                    // 真实文件上传
+                    console.log('使用FormData方式发送文件:', currentFile.name);
+                    const formData = new FormData();
+                    formData.append('image', currentFile, currentFile.name);
+                    formData.append('confidence_threshold', confidenceThreshold.toString());
+                    
+                    response = await fetch('/api/detect', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    console.log('文件上传请求已发送, 状态:', response.status);
+                } else {
+                    // 备用：使用base64方式
+                    console.log('使用JSON方式发送base64图片');
+                    const imageData = previewImage.src;
+                    // 使用相对路径
+                    response = await fetch('/api/detect', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            image: imageData,
+                            confidence_threshold: confidenceThreshold,
+                            include_visualization: true
+                        })
+                    });
+                }
+                
+                console.log('响应状态:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('检测失败:', errorText);
+                    throw new Error('检测失败: ' + response.status);
+                }
+                
+                const data = await response.json();
+                console.log('检测结果:', data);
+                
+                // 使用新的处理模块处理结果
+                if (typeof handleDetectionResult === 'function') {
+                    handleDetectionResult(data);
+                } else {
+                    console.error('handleDetectionResult函数未定义');
+                }
+                
+                // 隐藏处理指示器
+                processingIndicator.classList.remove('active');
+                detectBtn.disabled = false;
+                
+            } catch (error) {
+                console.error('检测失败:', error);
+                alert('检测失败: ' + error.message);
+                processingIndicator.classList.remove('active');
+                detectBtn.disabled = false;
+            }
+        });
+        
+        // 测试连接按钮
+        const testBtn = document.getElementById('testBtn');
+        if (testBtn) {
+            console.log('Test button found, adding event listener');
+            testBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                console.log('点击测试按钮');
+                console.log('测试API连接...');
+                // 使用绝对路径
+                console.log('Testing API at: /api/test');
+                try {
+                    const response = await fetch('/api/test', {
+                        method: 'GET'
+                    });
+                    console.log('Response status:', response.status);
+                    const data = await response.json();
+                    console.log('API测试响应:', data);
+                    alert('API连接正常！\n' + JSON.stringify(data, null, 2));
+                } catch (error) {
+                    console.error('API连接失败:', error);
+                    alert('API连接失败: ' + error.message);
+                }
+            });
+        } else {
+            console.error('Test button not found!')
+        }
+        
+        // 重置按钮功能
+        if (resetBtn) {
+            resetBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('点击重置按钮');
+                location.reload();
+            });
+        } else {
+            console.error('重置按钮不存在');
+        }
+        
+        /* 原有的处理代码已移至detection-handler.js
+                // 处理实例分割检测结果
+                const results = {
+                    detected: data.detection.disease_detected,
+                    confidence: Math.round(data.detection.confidence * 100),
+                    totalInstances: data.detection.total_instances || 0,
+                    observationCount: data.detection.observation_count || 0,
+                    surgeryCount: data.detection.surgery_count || 0,
+                    time: new Date().getTime() - startTime,
+                    severity: data.detection.severity || '未知',
+                    classDistribution: data.detection.class_distribution || {},
+                    boundingBoxes: data.detection.bounding_boxes || [],
+                    segmentationMasks: data.detection.segmentation_masks || [],
+                    visualizationUrl: data.detection.visualization_url || '',
+                    recommendations: data.detection.recommendations || [],
+                    modelType: data.detection.details?.model_type || 'unknown'
+                };
+            
+            // 显示实例分割结果
+            document.getElementById('detectionResult').textContent = 
+                results.detected ? `检测到${results.totalInstances}处病变` : '未检测到病变';
+            document.getElementById('confidenceResult').textContent = results.confidence;
+            document.getElementById('areaResult').textContent = 
+                `观察:${results.observationCount} 手术:${results.surgeryCount}`;
+            document.getElementById('timeResult').textContent = results.time;
+            
+            // 如果检测到病变
+            if (results.detected) {
+                // 显示实例分割的边界框
+                const overlay = document.getElementById('detectionOverlay');
+                overlay.innerHTML = '';
+                
+                // 为每个检测到的实例添加边界框
+                results.boundingBoxes.forEach((box, index) => {
+                    const boxDiv = document.createElement('div');
+                    boxDiv.className = 'detection-box';
+                    boxDiv.style.position = 'absolute';
+                    
+                    // 根据类别设置颜色
+                    if (box.label === '手术') {
+                        boxDiv.style.borderColor = '#ff4444';
+                        boxDiv.style.backgroundColor = 'rgba(255, 68, 68, 0.2)';
+                    } else if (box.label === '观察') {
+                        boxDiv.style.borderColor = '#00a651';
+                        boxDiv.style.backgroundColor = 'rgba(0, 166, 81, 0.2)';
+                    }
+                    
+                    // 计算边界框位置（需要根据图片实际尺寸调整）
+                    const imgRect = previewImage.getBoundingClientRect();
+                    const scaleX = imgRect.width / 512;  // 假设模型输入为512x512
+                    const scaleY = imgRect.height / 512;
+                    
+                    boxDiv.style.left = (box.x1 * scaleX) + 'px';
+                    boxDiv.style.top = (box.y1 * scaleY) + 'px';
+                    boxDiv.style.width = ((box.x2 - box.x1) * scaleX) + 'px';
+                    boxDiv.style.height = ((box.y2 - box.y1) * scaleY) + 'px';
+                    
+                    // 添加标签
+                    const label = document.createElement('div');
+                    label.style.position = 'absolute';
+                    label.style.top = '-20px';
+                    label.style.left = '0';
+                    label.style.backgroundColor = box.label === '手术' ? '#ff4444' : '#00a651';
+                    label.style.color = 'white';
+                    label.style.padding = '2px 6px';
+                    label.style.fontSize = '12px';
+                    label.style.borderRadius = '3px';
+                    label.textContent = `${box.label} ${(box.confidence * 100).toFixed(1)}%`;
+                    boxDiv.appendChild(label);
+                    
+                    overlay.appendChild(boxDiv);
+                });
+                
+                // 如果有可视化结果，显示分割后的图像
+                const lesionImage = document.getElementById('lesionImage');
+                if (results.visualizationUrl) {
+                    lesionImage.src = results.visualizationUrl;
+                } else {
+                    lesionImage.src = previewImage.src;
+                }
+                
+                // 添加病变区域标注
+                const lesionOverlay = document.getElementById('lesionOverlay');
+                lesionOverlay.innerHTML = '';
+                const lesionMask = document.createElement('div');
+                lesionMask.className = 'lesion-mask';
+                lesionMask.style.left = '30%';
+                lesionMask.style.top = '40%';
+                lesionMask.style.width = '120px';
+                lesionMask.style.height = '80px';
+                lesionOverlay.appendChild(lesionMask);
+                
+                // 绘制类别分布柱状图
+                drawClassDistributionChart(results);
+                
+                // 更新病理报告
+                updatePathologyReport(results);
+                
+                // 显示推荐建议
+                if (results.recommendations && results.recommendations.length > 0) {
+                    const recommendationsHtml = results.recommendations.map(r => `<li>${r}</li>`).join('');
+                    document.getElementById('recommendationsList').innerHTML = recommendationsHtml;
+                }
+                
+                // 显示详细结果和报告
+                document.getElementById('detectionResultsContainer').classList.add('active');
+                document.getElementById('pathologyReport').classList.add('active');
+            }
+            
+            processingIndicator.classList.remove('active');
+            resultsSection.classList.add('active');
+            detectBtn.disabled = false;
+            
+            } catch (error) {
+                console.error('检测失败:', error);
+                alert('检测失败，请重试');
+                processingIndicator.classList.remove('active');
+                detectBtn.disabled = false;
+            }
+        });
+        
+        // 绘制类别分布柱状图
+        function drawClassDistributionChart(results) {
+            const canvas = document.getElementById('severityChart');
+            const ctx = canvas.getContext('2d');
+            
+            // 设置canvas尺寸
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            const barWidth = (width - padding * 2) / 3 - 40;
+            const maxHeight = height - padding * 2;
+            
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+            
+            // 设置样式
+            ctx.fillStyle = '#333';
+            ctx.font = '14px Arial';
+            
+            // 数据
+            const total = results.totalInstances || 1;
+            const categories = [
+                { 
+                    label: '观察病变', 
+                    value: results.observationCount || 0, 
+                    percentage: Math.round((results.observationCount / total) * 100) || 0,
+                    color: '#00a651' 
+                },
+                { 
+                    label: '手术病变', 
+                    value: results.surgeryCount || 0,
+                    percentage: Math.round((results.surgeryCount / total) * 100) || 0,
+                    color: '#ff4444' 
+                }
+            ];
+            
+            // 绘制Y轴
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.strokeStyle = '#ddd';
+            ctx.stroke();
+            
+            // 绘制Y轴刻度和标签
+            for (let i = 0; i <= 10; i++) {
+                const y = padding + (maxHeight / 10) * i;
+                const value = 100 - i * 10;
+                
+                // 刻度线
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.strokeStyle = '#333';
+                ctx.stroke();
+                
+                // 刻度值
+                ctx.fillStyle = '#666';
+                ctx.textAlign = 'right';
+                ctx.fillText(value + '%', padding - 10, y + 5);
+            }
+            
+            // 绘制X轴
+            ctx.beginPath();
+            ctx.moveTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding);
+            ctx.strokeStyle = '#ddd';
+            ctx.stroke();
+            
+            // 调整柱状图布局（2个柱子）
+            const adjustedBarWidth = (width - padding * 2) / 2 - 60;
+            
+            // 绘制柱状图
+            categories.forEach((cat, index) => {
+                const x = padding + 60 + index * (adjustedBarWidth + 60);
+                const barHeight = (cat.percentage / 100) * maxHeight;
+                const y = height - padding - barHeight;
+                
+                // 绘制柱子
+                ctx.fillStyle = cat.color;
+                ctx.fillRect(x, y, adjustedBarWidth, barHeight);
+                
+                // 绘制数值标签（显示数量和百分比）
+                ctx.fillStyle = '#333';
+                ctx.textAlign = 'center';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(`${cat.value}处`, x + adjustedBarWidth / 2, y - 25);
+                ctx.font = '14px Arial';
+                ctx.fillText(`(${cat.percentage}%)`, x + adjustedBarWidth / 2, y - 10);
+                
+                // 绘制类别标签
+                ctx.font = '14px Arial';
+                ctx.fillText(cat.label, x + adjustedBarWidth / 2, height - padding + 20);
+            });
+            
+            // 添加图表标题
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('病变类型分布', width / 2, 20);
+            
+            // Y轴标题
+            ctx.save();
+            ctx.translate(15, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.font = '14px Arial';
+            ctx.fillText('比例 (%)', 0, 0);
+            ctx.restore();
+        }
+        
+        // 更新病理报告
+        function updatePathologyReport(results) {
+            // 更新日期和时间
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('zh-CN');
+            const timeStr = today.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            
+            document.getElementById('reportDate').textContent = dateStr;
+            document.getElementById('printTime').textContent = dateStr + ' ' + timeStr;
+            document.getElementById('reportSignDate').textContent = dateStr;
+            
+            // 生成报告编号
+            const reportId = 'RPT' + today.getFullYear() + 
+                           ('0' + (today.getMonth() + 1)).slice(-2) + 
+                           ('0' + today.getDate()).slice(-2) + 
+                           ('000' + Math.floor(Math.random() * 1000)).slice(-3);
+            document.getElementById('reportId').textContent = reportId;
+            
+            // 生成病历号
+            const patientId = 'MR-' + today.getFullYear() + '-' + 
+                            ('0000' + Math.floor(Math.random() * 10000)).slice(-4);
+            document.getElementById('patientId').textContent = patientId;
+            
+            // 更新检测结果
+            document.getElementById('reportDetection').textContent = results.detected ? '阳性' : '阴性';
+            document.getElementById('reportDetection').style.color = results.detected ? '#ff4444' : '#00a651';
+            document.getElementById('reportArea').textContent = results.area;
+            document.getElementById('reportInvasion').textContent = (results.area * 0.1).toFixed(1) + ' mm';
+            document.getElementById('reportConfidence').textContent = results.confidence;
+            
+            // 根据实例分割结果更新
+            let severity = results.severity || '未知';
+            let conclusion = '';
+            let recommendations = results.recommendations || [];
+            
+            // 根据检测结果生成结论
+            if (results.surgeryCount > 0 && results.observationCount > 0) {
+                conclusion = `检测发现眼部存在${results.totalInstances}处胬肉病变，其中${results.surgeryCount}处建议手术治疗，${results.observationCount}处需要观察。病变已侵犯角膜，需要及时治疗。`;
+            } else if (results.surgeryCount > 0) {
+                conclusion = `检测发现眼部存在${results.surgeryCount}处需要手术治疗的胬肉病变，病变程度较重，建议尽快就医。`;
+            } else if (results.observationCount > 0) {
+                conclusion = `检测发现眼部存在${results.observationCount}处需要观察的胬肉病变，病变程度较轻，建议定期复查。`;
+            } else {
+                conclusion = '眼部检查结果正常，未发现明显病变。建议继续保持良好的用眼习惯。';
+            }
+            
+            document.getElementById('reportSeverity').textContent = severity;
+            document.getElementById('reportConclusion').textContent = conclusion;
+            
+            // 更新建议列表
+            const recommendationsList = document.getElementById('reportRecommendations');
+            if (recommendations && recommendations.length > 0) {
+                recommendationsList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+            }
+        }
+        
+        
+        // 重置
+        resetBtn.addEventListener('click', () => {
+            previewImage.src = '';
+            previewImage.classList.remove('active');
+            document.querySelector('.preview-placeholder').style.display = 'block';
+            uploadZone.classList.remove('has-file');
+            detectBtn.disabled = true;
+            resultsSection.classList.remove('active');
+            document.getElementById('detectionOverlay').innerHTML = '';
+            fileInput.value = '';
+            
+            // 清除新增的结果展示
+            document.getElementById('detectionResultsContainer').classList.remove('active');
+            document.getElementById('pathologyReport').classList.remove('active');
+            document.getElementById('lesionOverlay').innerHTML = '';
+            
+            // 清空canvas
+            const canvas = document.getElementById('severityChart');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+        
+        // 下载报告（全局函数）
+        function downloadReport() {
+            // 获取报告内容
+            const reportSection = document.getElementById('pathologyReport');
+            if (!reportSection) {
+                alert('报告尚未生成');
+                return;
+            }
+            
+            try {
+                // 保存当前页面状态
+                const originalDisplay = reportSection.style.display;
+                
+                // 确保报告可见
+                reportSection.style.display = 'block';
+                reportSection.classList.add('active');
+                
+                // 使用浏览器打印功能并提示用户选择"另存为PDF"
+                setTimeout(() => {
+                    // 弹出提示
+                    alert('将打开打印对话框，请选择"另存为PDF"或"Microsoft Print to PDF"来保存报告');
+                    
+                    // 触发打印
+                    window.print();
+                    
+                    // 恢复原始状态
+                    reportSection.style.display = originalDisplay;
+                }, 100);
+                
+            } catch (error) {
+                console.error('下载报告失败:', error);
+                alert('下载功能出现问题，请使用打印功能（Ctrl+P）并选择"另存为PDF"');
+            }
+        }
+        
+        // 打印报告（全局函数）
+        function printReport() {
+            const reportSection = document.getElementById('pathologyReport');
+            if (!reportSection) {
+                alert('报告尚未生成');
+                return;
+            }
+            
+            try {
+                // 确保报告可见
+                reportSection.style.display = 'block';
+                reportSection.classList.add('active');
+                
+                // 直接使用浏览器打印功能
+                window.print();
+            } catch (error) {
+                console.error('打印失败:', error);
+                alert('打印功能出现问题，请尝试使用浏览器的打印功能（Ctrl+P）');
+            }
+        }
+    </script>
+</body>
+</html>

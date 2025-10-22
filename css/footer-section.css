@@ -1,0 +1,115 @@
+/* 通用页脚半屏样式 */
+.footer-section {
+    min-height: 50vh;
+    background: #000;
+    position: relative;
+    padding: 80px 60px;
+    display: flex;
+    align-items: center;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.footer-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.footer-logo {
+    font-size: 28px;
+    color: #00a6fb;
+}
+
+/* 页脚图片logo样式 */
+.footer-logo img,
+img.footer-logo {
+    height: 80px;  /* 可以随意修改这个值调整页脚logo大小 */
+    width: auto;
+    object-fit: contain;
+}
+
+.footer-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.footer-subtitle {
+    font-size: 42px;
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 60px;
+    letter-spacing: 3px;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 60px;
+}
+
+.footer-nav-item {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.footer-nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #00a6fb;
+    transition: width 0.3s;
+}
+
+.footer-nav-item:hover {
+    color: #fff;
+}
+
+.footer-nav-item:hover::after {
+    width: 100%;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .footer-section {
+        padding: 60px 30px;
+    }
+    
+    .footer-title {
+        font-size: 24px;
+    }
+    
+    .footer-subtitle {
+        font-size: 32px;
+        margin-bottom: 40px;
+    }
+    
+    .footer-nav {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .footer-nav-item {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-subtitle {
+        font-size: 24px;
+    }
+}

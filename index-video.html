@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智瞳AI - 智护视界</title>
+    <meta name="description" content="基于PaddleX的眼部胬肉AI检测系统">
+    <link rel="stylesheet" href="css/video-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="logo-scan"></div>
+                </div>
+                <span class="brand-name">智瞳AI</span>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">首页</a></li>
+                <li><a href="pages/detection.html" class="nav-link">AI检测</a></li>
+                <li><a href="pages/device-monitor.html" class="nav-link">设备监控</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主页内容 -->
+    <section class="hero-section" id="home">
+        <!-- 视频背景 -->
+        <div class="video-background">
+            <div class="video-overlay"></div>
+            <!-- 使用视频或动态背景 -->
+            <video autoplay muted loop playsinline class="bg-video">
+                <source src="videos/medical-tech.mp4" type="video/mp4">
+            </video>
+            <!-- 备用：动态Canvas背景 -->
+            <canvas id="tech-canvas" class="tech-background"></canvas>
+        </div>
+
+        <!-- 主内容 -->
+        <div class="hero-content">
+            <div class="content-container">
+                <!-- 左侧装饰 -->
+                <div class="side-decoration left">
+                    <div class="deco-line"></div>
+                    <div class="deco-dot"></div>
+                </div>
+                
+                <!-- 中心内容 -->
+                <div class="center-content">
+                    <!-- 技术标识 -->
+                    <div class="tech-indicator">
+                        <span class="indicator-dot"></span>
+                        <span class="indicator-text">PaddleX驱动</span>
+                        <span class="indicator-line"></span>
+                    </div>
+                    
+                    <!-- 主标题 -->
+                    <h1 class="main-title">
+                        <span class="title-main">智护视界</span>
+                    </h1>
+                    
+                    <!-- 描述 -->
+                    <div class="description">
+                        <p class="desc-primary">AI计算精准识别眼部胬肉病变区域</p>
+                        <p class="desc-secondary">支持多设备集成，提供实时监控和智能诊断服务</p>
+                    </div>
+                    
+                    <!-- 操作按钮 -->
+                    <div class="action-buttons">
+                        <a href="pages/detection.html" class="btn-start">
+                            <span class="btn-bg"></span>
+                            <span class="btn-content">
+                                <span class="btn-text">开始检测</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                    
+                    <!-- 技术特性 -->
+                    <div class="tech-features">
+                        <div class="feature-item">
+                            <i class="fas fa-microchip"></i>
+                            <span>深度学习</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>安全可靠</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>实时检测</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧装饰 -->
+                <div class="side-decoration right">
+                    <div class="deco-line"></div>
+                    <div class="deco-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 滚动指示器 -->
+        <div class="scroll-hint">
+            <div class="scroll-icon">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span class="scroll-text">向下滚动</span>
+        </div>
+        
+        <!-- 底部装饰波浪 -->
+        <div class="wave-decoration">
+            <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+                <path d="M0,40 C480,80 960,0 1440,40 L1440,100 L0,100 Z" fill="rgba(255,255,255,0.02)"></path>
+                <path d="M0,60 C480,20 960,100 1440,60 L1440,100 L0,100 Z" fill="rgba(255,255,255,0.03)"></path>
+            </svg>
+        </div>
+    </section>
+
+    <script src="js/video-homepage.js"></script>
+</body>
+</html>

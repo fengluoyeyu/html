@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统介绍 - 明眸辨齿</title>
+    <link rel="stylesheet" href="../css/minimal-style.css">
+    <link rel="stylesheet" href="../css/footer-section.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* 第一屏 - 关于我们 */
+        .section-about {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 上半部分 - 图片区域 */
+        .about-image-area {
+            height: 50vh;
+            position: relative;
+            background: #111;
+            overflow: hidden;
+        }
+        
+        .about-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #666;
+            font-size: 18px;
+        }
+        
+        /* 下半部分 - 内容区域 */
+        .about-content-area {
+            height: 50vh;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #000;
+        }
+        
+        .about-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+        
+        .about-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+        }
+        
+        /* 第二屏 - 图片轮播 */
+        .section-gallery {
+            min-height: 100vh;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gallery-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gallery-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gallery-slide.active {
+            opacity: 1;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 24px;
+        }
+        
+        /* 轮播指示器 */
+        .gallery-indicators {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .indicator-dot.active {
+            background: #00a6fb;
+            width: 30px;
+            border-radius: 6px;
+        }
+        
+        /* 第三屏 - 模型概述 */
+        .section-model {
+            min-height: 100vh;
+            background: #0f0f0f;
+            padding: 80px 60px;
+            position: relative;
+        }
+        
+        .model-header {
+            margin-bottom: 60px;
+        }
+        
+        .model-title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        .model-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+        
+        /* 左侧内容 */
+        .model-content {
+            padding-right: 40px;
+        }
+        
+        .model-subtitle {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #00a6fb;
+        }
+        
+        .model-description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+        }
+        
+        .model-features {
+            list-style: none;
+        }
+        
+        .model-feature {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .model-feature i {
+            color: #00a6fb;
+            font-size: 20px;
+        }
+        
+        /* 右侧图片网格 */
+        .model-images {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .image-row {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .image-row.single {
+            justify-content: center;
+        }
+        
+        .model-image-box {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .model-image-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .model-image-box.large {
+            width: 100%;
+            height: 250px;
+        }
+        
+        .model-image-box.small {
+            flex: 1;
+            height: 200px;
+        }
+        
+        .model-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 16px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .model-container {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+            
+            .model-content {
+                padding-right: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .about-content-area,
+            .section-model {
+                padding: 40px 30px;
+            }
+            
+            .about-title,
+            .model-title {
+                font-size: 36px;
+            }
+            
+            .about-text,
+            .model-description {
+                font-size: 16px;
+            }
+            
+            .image-row {
+                flex-direction: column;
+            }
+            
+            .model-image-box.small {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 透明导航栏 -->
+    <nav class="navbar">
+        <div class="nav-wrapper">
+            <a href="../index.html" class="nav-logo">
+                <img src="../images/logo.png" alt="AI智齿卫">
+                <span>明眸辨齿</span>
+            </a>
+            <div class="nav-links">
+                <a href="intro.html" class="nav-item">系统介绍</a>
+                <a href="detection.html" class="nav-item">AI检测</a>
+                <a href="device-monitor.html" class="nav-item">设备监控</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 第一屏：关于我们 -->
+    <section class="section-about">
+        <!-- 上半部分：图片区域 -->
+        <div class="about-image-area">
+            <div class="about-image-placeholder">
+                    <img src="../images/three.jpg" alt="关于我们" 
+                    style="width: 100%; height: 100%; object-fit: cover;">
+                
+            </div>
+        </div>
+        
+        <!-- 下半部分：内容区域 -->
+        <div class="about-content-area">
+            <h2 class="about-title">关于我们</h2>
+            <div class="about-text">
+                <p>AI智齿卫是一家专注于口腔医疗人工智能技术研发的创新团队。我们致力于通过先进的深度学习技术，为口腔疾病的早期筛查和精准诊断提供智能化解决方案。</p>
+                <br>
+                <p>基于多模型融合技术，我们开发了业界领先的曲面断层口腔健康智能筛查系统，该系统能够快速、准确地识别口腔问题区域，大幅提升诊断效率，让优质的口腔医疗服务惠及更多患者。</p>
+                <br>
+                <p>我们的使命是"明眸辨齿，AI守护每一口牙齿"，通过科技创新推动医疗健康事业发展，为建设健康中国贡献力量。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第二屏：图片轮播 -->
+    <section class="section-gallery">
+        <div class="gallery-container">
+            <!-- 轮播图片 -->
+            <div class="gallery-slide active" id="gallery-slide-1">
+                <img src="../images/intro2.jpg" alt="展示1" class="gallery-image">
+            </div>
+            <div class="gallery-slide" id="gallery-slide-2">
+                <img src="../images/intro1.jpg" alt="展示2" class="gallery-image">
+            </div>
+            <div class="gallery-slide" id="gallery-slide-3">
+                <img src="../images/intro3.png" alt="展示3" class="gallery-image">
+            </div>
+            <div class="gallery-slide" id="gallery-slide-4">
+                <img src="../images/intro4.jpg" alt="展示4" class="gallery-image">
+            </div>>
+            
+            <!-- 指示器 -->
+            <div class="gallery-indicators">
+                <span class="indicator-dot active" data-slide="0"></span>
+                <span class="indicator-dot" data-slide="1"></span>
+                <span class="indicator-dot" data-slide="2"></span>
+                <span class="indicator-dot" data-slide="3"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第三屏：模型概述 -->
+    <section class="section-model">
+        <div class="model-header">
+            <h2 class="model-title">模型概述</h2>
+        </div>
+        
+        <div class="model-container">
+            <!-- 左侧：内容 -->
+            <div class="model-content">
+                <h3 class="model-subtitle">多模型融合口腔检测系统</h3>
+                <p class="model-description">
+                    我们的AI系统基于多模型融合深度学习技术开发，采用先进的曲面断层分析技术，能够精准识别和定位口腔健康问题区域。系统经过大规模医疗数据训练，准确率达到临床应用标准。
+                </p>
+                
+                <ul class="model-features">
+                    <li class="model-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>高精度识别：准确率超过95%，满足临床诊断需求</span>
+                    </li>
+                    <li class="model-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>实时检测：毫秒级响应，支持实时图像分析</span>
+                    </li>
+                    <li class="model-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>多模态融合：支持多种医学影像格式输入</span>
+                    </li>
+                    <li class="model-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>持续优化：模型自动更新，性能不断提升</span>
+                    </li>
+                    <li class="model-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>边缘部署：支持本地化部署，保护数据隐私</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 右侧：图片网格 -->
+            <div class="model-images">
+                <!-- 第一行：一张大图 -->
+                <div class="image-row single">
+                    <div class="model-image-box large">
+                            <img src="../images/structure.png" alt="PaddleX模型架构" 
+                            style="width: 100%; height: 100%;">
+                    </div>
+                </div>
+                
+                <!-- 第二行：两张小图 -->
+                <div class="image-row">
+                    <div class="model-image-box small">
+                        <div class="model-image-placeholder">
+                                <img src="../images/liucheng.png" alt="PaddleX模型架构" 
+                                style="width: 100%; height: 100%;">
+                        </div>
+                    </div>
+                    <div class="model-image-box small">
+                        <div class="model-image-placeholder">
+                                <img src="../images/liucheng2.png" alt="PaddleX模型架构" 
+                                style="width: 100%; height: 100%;"> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚半屏 -->
+    <section class="footer-section">
+        <div class="footer-container">
+            <div class="footer-header">
+                <img src="../images/logo.png" alt="AI智齿卫" class="footer-logo">
+                <h2 class="footer-title">明眸辨齿</h2>
+            </div>
+            <p class="footer-subtitle">AI智齿卫团队倾心力作</p>
+            <nav class="footer-nav">
+                <a href="intro.html" class="footer-nav-item">系统介绍</a>
+                <a href="detection.html" class="footer-nav-item">AI检测</a>
+                <a href="device-monitor.html" class="footer-nav-item">设备监控</a>
+            </nav>
+        </div>
+    </section>
+
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // 图片轮播功能
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.gallery-slide');
+        const indicators = document.querySelectorAll('.indicator-dot');
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            indicators[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        // 自动轮播
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 4000);
+
+        // 点击指示器切换
+        indicators.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+    </script>
+</body>
+</html>

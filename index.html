@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>明眸辨齿 - 曲面断层口腔健康智能筛查系统</title>
+    <meta name="description" content="基于多模型融合的口腔健康AI检测系统">
+    <link rel="stylesheet" href="css/minimal-style.css">
+    <link rel="stylesheet" href="css/footer-section.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 透明导航栏 -->
+    <nav class="navbar">
+        <div class="nav-wrapper">
+            <a href="#" class="nav-logo">
+                <img src="images/logo.png" alt="AI智齿卫">
+                <span>明眸辨齿</span>
+            </a>
+            <div class="nav-links">
+                <a href="pages/intro.html" class="nav-item">系统介绍</a>
+                <a href="pages/detection.html" class="nav-item">AI检测</a>
+                <a href="pages/device-monitor.html" class="nav-item">设备监控</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 全屏英雄区域 -->
+    <section class="hero-fullscreen">
+        <!-- 背景图片轮播 -->
+        <div class="bg-slideshow">
+            <div class="bg-slide active" data-bg="eye-tech-1"></div>
+            <div class="bg-slide" data-bg="eye-tech-2"></div>
+            <div class="bg-slide" data-bg="eye-tech-3"></div>
+        </div>
+        
+        <!-- 深色遮罩 -->
+        <div class="bg-mask"></div>
+        
+        <!-- 动态网格背景 -->
+        <div class="grid-animation"></div>
+        
+        <!-- 主内容 - 居中显示 -->
+        <div class="hero-main">
+            <!-- 技术驱动标签 -->
+            <div class="tech-label">
+                <span class="label-dot"></span>
+                <span>多模型驱动</span>
+            </div>
+            
+            <!-- 大标题 -->
+            <h1 class="hero-headline">明眸辨齿</h1>
+
+            <!-- 描述文字 -->
+            <div class="hero-desc">
+                <p>AI计算精准识别曲面断层口腔健康状况</p>
+                <p>支持多设备集成，提供实时监控和智能诊断服务</p>
+            </div>
+            
+            <!-- 开始按钮 -->
+            <a href="pages/detection.html" class="cta-button">
+                <span>开始使用</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- 侧边装饰元素 -->
+        <div class="side-elements">
+            <div class="side-line left"></div>
+            <div class="side-line right"></div>
+        </div>
+        
+        <!-- 底部滚动提示 -->
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第二屏：医疗场景 - 参考鱼跃医疗设计 -->
+    <section class="section-medical" id="medical">
+        <!-- 固定背景 -->
+        <div class="medical-bg">
+            <div class="bg-overlay"></div>
+        </div>
+        
+        <!-- 左上角标题 -->
+        <div class="medical-header">
+            <h2>以健康立心</h2>
+        </div>
+        
+        <!-- 中间轮播图片区域 -->
+        <div class="medical-center">
+            <div class="image-carousel">
+                <!-- 轮播图片1 -->
+                <div class="carousel-image active" data-index="0">
+                    <img src="images/zhuye3.jpg" alt="医生场景">
+                </div>
+                <!-- 轮播图片2 -->
+                <div class="carousel-image" data-index="1">
+                    <img src="images/zhuye4.jpg" alt="患者场景">
+                </div>
+                <!-- 轮播图片3 -->
+                <div class="carousel-image" data-index="2">
+                    <img src="images/zhuye5.jpg" alt="社会场景">
+                </div>
+            </div>
+            
+            <!-- 左右切换箭头 -->
+            <button class="nav-prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <!-- 底部内容区域 -->
+        <div class="medical-bottom">
+            <!-- 滑动内容容器 -->
+            <div class="content-slider">
+                <!-- 内容1：于医生 -->
+                <div class="content-item active" data-index="0">
+                    <h3 class="content-title">为医生</h3>
+                    <p class="content-subtitle">希望在医生与患者之间建立起信任的桥梁</p>
+                    <p class="content-desc">赋能医疗专业人员及医疗机构，通过明眸辨齿精准识别口腔健康问题，<br>提高诊断效率与准确性，让医生能够将更多精力投入到复杂病例中。</p>
+                </div>
+                <!-- 内容2：于患者 -->
+                <div class="content-item" data-index="1">
+                    <h3 class="content-title">为患者</h3>
+                    <p class="content-subtitle">让每一位患者都能获得及时准确的诊疗</p>
+                    <p class="content-desc">通过AI技术实现早期筛查和精准诊断，减少患者等待时间，<br>提供个性化的健康管理方案，守护每一口牙齿的健康。</p>
+                </div>
+                <!-- 内容3：于社会 -->
+                <div class="content-item" data-index="2">
+                    <h3 class="content-title">为社会</h3>
+                    <p class="content-subtitle">推动智慧医疗发展，促进健康公平</p>
+                    <p class="content-desc">缩小城乡医疗差距，让优质的口腔诊疗服务覆盖更广泛的人群，<br>为建设健康中国贡献科技力量。</p>
+                </div>
+            </div>
+            
+            <!-- 底部指示器 -->
+            <div class="slide-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
+                <span class="indicator" data-index="2"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第三屏：场景展示 - 参考鱼跃医疗直线分割设计 -->
+    <section class="section-scene" id="scene">
+        <!-- 全屏背景图片 -->
+        <div class="scene-bg">
+            <img src="images/homepage.png" alt="场景展示">
+            <div class="bg-overlay-light"></div>
+        </div>
+        
+        <!-- 左上角标题 -->
+        <div class="scene-header">
+            <h2>明眸辨齿的世界</h2>
+        </div>
+        
+        <!-- 底部内容区域 - 2行2列直线分割布局 -->
+        <div class="scene-bottom">
+            <div class="scene-grid">
+                <!-- 第一行 -->
+                <div class="scene-row">
+                    <!-- 第一个区块 -->
+                    <div class="scene-item">
+                        <div class="item-number">
+                            <span class="number">01</span>
+                            <span class="english">Dental Freedom</span>
+                        </div>
+                        <div class="item-text">
+                            <h4>为自由微笑的世界</h4>
+                            <p>让每一口牙齿都能展现自信笑容</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 垂直分割线 -->
+                    <div class="divider-vertical"></div>
+                    
+                    <!-- 第二个区块 -->
+                    <div class="scene-item">
+                        <div class="item-number">
+                            <span class="number">02</span>
+                            <span class="english">Health Pathway</span>
+                        </div>
+                        <div class="item-text">
+                            <h4>重塑健康生命航道</h4>
+                            <p>用AI守护口腔健康的每一天</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 水平分割线 -->
+                <div class="divider-horizontal"></div>
+                
+                <!-- 第二行 -->
+                <div class="scene-row">
+                    <!-- 第三个区块 -->
+                    <div class="scene-item">
+                        <div class="item-number">
+                            <span class="number">03</span>
+                            <span class="english">Life Everywhere</span>
+                        </div>
+                        <div class="item-text">
+                            <h4>场景生命无处不在</h4>
+                            <p>医疗科技融入日常生活场景</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 垂直分割线 -->
+                    <div class="divider-vertical"></div>
+                    
+                    <!-- 第四个区块 -->
+                    <div class="scene-item">
+                        <div class="item-number">
+                            <span class="number">04</span>
+                            <span class="english">Tech Guardian</span>
+                        </div>
+                        <div class="item-text">
+                            <h4>技术生命无处不在</h4>
+                            <p>从检测到预防，全面守护口腔健康</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第四屏：功能介绍 -->
+    <!-- 如果有背景图片，添加 has-bg-image 类 -->
+    <section class="section-features" id="features">
+        <div class="section-bg">
+            <!-- 背景图片或视频（可选） -->
+            <div class="bg-media" data-type="image">
+                <!-- 如需添加背景图片，取消下行注释并添加 has-bg-image 类到 section -->
+                <!--<img src="images/four.jpg" alt="功能背景"-->
+                <!-- 视频示例：
+                <video autoplay muted loop>
+                    <source src="videos/features-bg.mp4" type="video/mp4">
+                </video>
+                -->
+            </div>
+            <div class="bg-overlay"></div>
+        </div>
+        
+        <div class="section-content">
+            <div class="content-inner">
+                <h2 class="section-title">核心功能与技术</h2>
+                <p class="section-subtitle">曲面断层口腔健康智能筛查系统</p>
+                
+                <!-- 核心技术介绍 -->
+                <div class="tech-showcase">
+                    <div class="tech-main">
+                        <h3 class="tech-title">
+                            <i class="fas fa-microchip"></i>
+                            核心技术架构
+                        </h3>
+                        <div class="tech-modules">
+                            <div class="tech-module">
+                                <div class="module-icon">
+                                    <i class="fas fa-tooth"></i>
+                                </div>
+                                <h4>计算机视觉</h4>
+                                <p>基于深度学习的图像识别技术，精准分析曲面断层口腔医学影像，实现病变区域的自动检测与标注</p>
+                            </div>
+                            <div class="tech-module">
+                                <div class="module-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <h4>模型训练</h4>
+                                <p>采用多模型融合框架，通过大规模医疗数据集训练，持续优化模型精度，确保检测准确率达到临床标准</p>
+                            </div>
+                            <div class="tech-module">
+                                <div class="module-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h4>边缘计算</h4>
+                                <p>支持模型本地化部署，实现毫秒级响应，保护患者隐私数据的同时提供实时诊断服务</p>
+                            </div>
+                            <div class="tech-module">
+                                <div class="module-icon">
+                                    <i class="fas fa-network-wired"></i>
+                                </div>
+                                <h4>智能处理</h4>
+                                <p>多模态数据融合处理，结合图像分析与临床信息，提供综合性的辅助诊断建议</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 功能特性 -->
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI智能检测</h3>
+                        <p>精准识别口腔病变</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>实时监控</h3>
+                        <p>设备状态实时追踪</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>数据安全</h3>
+                        <p>医疗数据加密保护</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚半屏 -->
+    <section class="footer-section">
+        <div class="footer-container">
+            <div class="footer-header">
+                <img src="images/logo.png" alt="AI智齿卫" class="footer-logo">
+                <h2 class="footer-title">明眸辨齿</h2>
+            </div>
+            <p class="footer-subtitle">AI智齿卫团队倾心力作</p>
+            <nav class="footer-nav">
+                <a href="pages/intro.html" class="footer-nav-item">系统介绍</a>
+                <a href="pages/detection.html" class="footer-nav-item">AI检测</a>
+                <a href="pages/device-monitor.html" class="footer-nav-item">设备监控</a>
+            </nav>
+        </div>
+    </section>
+
+    <script src="js/minimal.js"></script>
+</body>
+</html>

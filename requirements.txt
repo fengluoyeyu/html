@@ -1,0 +1,36 @@
+# 智护视界眼部胬肉检测系统 - 依赖包
+# BML-CodeLab部署版本 v2.0 - 支持本地模型
+
+# Web框架
+Flask==2.3.3
+Flask-CORS==4.0.0
+Werkzeug==2.3.7
+
+# 图像处理
+Pillow==10.0.0
+opencv-python-headless==4.8.0.76
+numpy==1.24.3
+
+# HTTP请求
+requests==2.31.0
+
+# 环境变量管理
+python-dotenv==1.0.0
+
+# 日志
+colorlog==6.7.0
+
+# 深度学习框架 - 可选安装（由部署脚本处理）
+# PaddlePaddle (推荐)
+# pip install paddlepaddle -i https://mirror.baidu.com/pypi/simple
+
+# ONNX Runtime (备选)
+# pip install onnxruntime
+
+# PyTorch (备选)
+# pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+# 数据可视化（用于生成柱状图）
+matplotlib==3.7.2
+
+# 注意：具体的深度学习框架将在部署时根据可用性自动安装
