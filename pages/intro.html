@@ -359,19 +359,122 @@
             }
         }
 
-        @media (max-width: 480px) {
+        /* 主流手机优化 (360px-430px) */
+        @media (max-width: 430px) {
+            /* 关于我们区域 */
+            .about-image-area {
+                height: 35vh;
+            }
+
+            .about-content-area {
+                height: auto;
+                padding: 24px 16px;
+            }
+
+            .about-title {
+                font-size: 26px;
+                margin-bottom: 16px;
+                letter-spacing: 1px;
+            }
+
+            .about-text {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            /* 图片轮播区域 */
+            .section-gallery {
+                min-height: 45vh;
+            }
+
+            .gallery-container {
+                height: 45vh;
+            }
+
+            .gallery-indicators {
+                bottom: 16px;
+                gap: 8px;
+            }
+
+            .indicator-dot {
+                width: 6px;
+                height: 6px;
+            }
+
+            .indicator-dot.active {
+                width: 18px;
+            }
+
+            /* 模型概述区域 */
+            .section-model {
+                padding: 32px 16px;
+            }
+
+            .model-header {
+                margin-bottom: 40px;
+            }
+
+            .model-title {
+                font-size: 26px;
+                margin-bottom: 24px;
+            }
+
+            .model-subtitle {
+                font-size: 19px;
+                margin-bottom: 16px;
+            }
+
+            .model-description {
+                font-size: 14px;
+                line-height: 1.7;
+                margin-bottom: 20px;
+            }
+
+            .model-feature {
+                font-size: 13px;
+                padding: 10px 0;
+                gap: 12px;
+            }
+
+            .model-feature i {
+                font-size: 15px;
+            }
+
+            /* 图片网格 */
+            .model-images {
+                gap: 20px;
+            }
+
+            .image-row {
+                gap: 16px;
+            }
+
+            .model-image-box.small {
+                height: 160px;
+            }
+
+            .model-image-box.large {
+                height: 180px;
+            }
+
+            .model-image-placeholder {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 375px) {
             /* 超小屏幕优化 */
             .about-image-area {
                 height: 30vh;
             }
 
             .about-content-area {
-                padding: 20px 15px;
+                padding: 20px 14px;
             }
 
             .about-title,
             .model-title {
-                font-size: 24px;
+                font-size: 23px;
             }
 
             .about-text,
@@ -388,20 +491,20 @@
             }
 
             .section-model {
-                padding: 30px 15px;
+                padding: 28px 14px;
             }
 
             .model-subtitle {
-                font-size: 18px;
+                font-size: 17px;
             }
 
             .model-feature {
-                font-size: 13px;
+                font-size: 12px;
             }
 
             .model-image-box.small,
             .model-image-box.large {
-                height: 150px;
+                height: 140px;
             }
         }
     </style>
