@@ -507,6 +507,38 @@
                 height: 140px;
             }
         }
+
+        /* 强制手机端图片完整显示 */
+        @media (max-width: 768px) {
+            img {
+                max-width: 100% !important;
+                width: 100% !important;
+                height: auto !important;
+                object-fit: contain !important;
+            }
+
+            .about-image-placeholder img,
+            .gallery-image,
+            .model-image-box img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+            }
+
+            /* 确保容器不溢出 */
+            body, html {
+                overflow-x: hidden !important;
+            }
+
+            section {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+
+            .navbar {
+                padding: 12px 15px !important;
+            }
+        }
     </style>
 </head>
 <body>

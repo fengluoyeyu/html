@@ -843,6 +843,99 @@
                 justify-content: center;
             }
         }
+
+        /* 强制手机端优化 - 最高优先级 */
+        @media (max-width: 768px) {
+            /* 所有图片完整显示 */
+            img {
+                max-width: 100% !important;
+                height: auto !important;
+                object-fit: contain !important;
+            }
+
+            #previewImage,
+            #segmentationImage,
+            #recognitionImage {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                max-height: 300px !important;
+                object-fit: contain !important;
+            }
+
+            /* 检测容器 */
+            .detection-container {
+                padding: 10px !important;
+                margin: 70px auto 20px !important;
+            }
+
+            .detection-title {
+                font-size: 1.5rem !important;
+            }
+
+            /* 测试图片网格 */
+            .test-images-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+
+            /* 上传区域 */
+            .upload-zone {
+                padding: 20px 15px !important;
+                min-height: 150px !important;
+            }
+
+            /* 结果卡片 */
+            .results-grid {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .result-card {
+                padding: 15px !important;
+            }
+
+            /* 报告区域 */
+            .report-section {
+                padding: 12px !important;
+            }
+
+            .report-section table {
+                font-size: 13px !important;
+            }
+
+            .report-section td,
+            .report-section th {
+                padding: 6px 4px !important;
+                word-break: break-word !important;
+            }
+
+            /* 控制面板 */
+            .control-panel {
+                padding: 15px !important;
+            }
+
+            .control-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* 按钮 */
+            .btn-primary,
+            .btn-secondary {
+                width: 100% !important;
+                padding: 12px !important;
+                font-size: 14px !important;
+            }
+
+            /* 防止溢出 */
+            body, html {
+                overflow-x: hidden !important;
+            }
+
+            * {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -876,7 +969,7 @@
                     <select class="control-value" id="model-select">
                         <option value="yolov8" selected>YOLOv8</option>
                         <option value="instance_segmentation">实例分割模型</option>
-                        <option value="yolo">YOLO-Seg</option>
+                        <option value="maskrcnn">MaskRCNN</option>
                     </select>
                 </div>
                 <div class="control-item">
