@@ -1,0 +1,55 @@
+# Netlify配置文件
+# 明眸辨齿 - 曲面断层口腔健康智能筛查系统
+
+[build]
+  # 发布目录（静态网站根目录）
+  publish = "."
+
+  # 构建命令（静态网站不需要构建）
+  command = ""
+
+[[redirects]]
+  # 将所有请求重定向到index.html（SPA支持）
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+  # API请求保持原样
+  conditions = {Path = ["!/api/*"]}
+
+[[headers]]
+  # 为所有页面添加安全头
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  # 为静态资源添加缓存控制
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/test_*/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# 自定义404页面（可选）
+# [[redirects]]
+#   from = "/404"
+#   to = "/404.html"
+#   status = 404
