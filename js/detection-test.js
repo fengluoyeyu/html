@@ -156,7 +156,12 @@ function getOfflineDataForImage(imageName) {
             severity: '重度',
             label: '手术',
             segmentationImage: '../test_fenge/1.jpg',  // 分割结果图
-            recognitionImage: '../test_shibie/1.jpg'      // 识别结果图
+            recognitionImage: '../test_shibie/1.jpg',      // 识别结果图
+            diseaseTypes: [
+                { name: '填充', confidence: 0.5213 },
+                { name: '种植体', confidence: 0.4624 },
+                { name: '牙根管', confidence: 0.4352 }
+            ]
         },
         '2.png': {
             disease_detected: true,
@@ -167,7 +172,14 @@ function getOfflineDataForImage(imageName) {
             severity: '重度',
             label: '手术',
             segmentationImage: '../test_fenge/2.jpg',
-            recognitionImage: '../test_shibie/2.jpg'
+            recognitionImage: '../test_shibie/2.jpg',
+            diseaseTypes: [
+                { name: '阻生', confidence: 0.7778 },
+                { name: '填充', confidence: 0.5906 },
+                { name: '种植体', confidence: 0.4868 },
+                { name: '牙根管', confidence: 0.3996 },
+                { name: '龋齿', confidence: 0.3176 }
+            ]
         },
         '3.png': {
             disease_detected: true,
@@ -178,7 +190,10 @@ function getOfflineDataForImage(imageName) {
             severity: '轻度',
             label: '观察',
             segmentationImage: '../test_fenge/3.jpg',
-            recognitionImage: '../test_shibie/3.jpg'
+            recognitionImage: '../test_shibie/3.jpg',
+            diseaseTypes: [
+                { name: '填充', confidence: 0.546 }
+            ]
         },
         '4.png': {
             disease_detected: true,
@@ -189,7 +204,11 @@ function getOfflineDataForImage(imageName) {
             severity: '轻度',
             label: '观察',
             segmentationImage: '../test_fenge/4.jpg',
-            recognitionImage: '../test_shibie/4.jpg'
+            recognitionImage: '../test_shibie/4.jpg',
+            diseaseTypes: [
+                { name: '填充', confidence: 0.5528 },
+                { name: '阻生', confidence: 0.5815 }
+            ]
         }
     };
     
@@ -216,6 +235,9 @@ function displayOfflineResults(data) {
 
     // 更新病理报告（根据不同的测试图片）
     updatePathologyReportForTestImage(data);
+
+    // 填充病变类型数据
+    updateDiseaseTypes(data);
 
     // 更新检测类型（固定输出）
     const detectionType = document.getElementById('detectionType');
@@ -514,6 +536,28 @@ function getCurrentTestImageName() {
     return null;
 }
 
+// 更新病变类型显示
+function updateDiseaseTypes(data) {
+    const reportDiseaseTypes = document.getElementById('reportDiseaseTypes');
+    if (!reportDiseaseTypes) {
+        console.warn('找不到 reportDiseaseTypes 元素');
+        return;
+    }
+
+    if (data.diseaseTypes && data.diseaseTypes.length > 0) {
+        const diseaseHTML = data.diseaseTypes.map(disease => {
+            return `<p style="margin: 0.5rem 0; padding: 0.5rem; background: white; border-left: 3px solid #0066cc;">
+                <strong>${disease.name}</strong>，平均置信度：<span style="color: #0066cc; font-weight: bold;">${disease.confidence.toFixed(4)}</span>
+            </p>`;
+        }).join('');
+
+        reportDiseaseTypes.innerHTML = diseaseHTML;
+        console.log('病变类型已更新:', data.diseaseTypes.length + '个');
+    } else {
+        reportDiseaseTypes.innerHTML = '<p style="color: #666;">未检测到具体病变类型</p>';
+    }
+}
+
 // 更新病理报告（根据测试图片）
 function updatePathologyReportForTestImage(data) {
     console.log('更新病理报告，测试图片:', data.testImageName);
@@ -579,54 +623,55 @@ function updatePathologyReportForTestImage(data) {
     
     switch(imageName) {
         case '1.png':
-            invasionLength = '2.5mm';
-            severity = '中度';
-            diagnosis = '检测发现口腔存在病变，病变区域面积约2.5mm²，严重程度属于中度，充血明显，组织肥厚，可能影响正常功能，根据病变大小和位置判断为中度病变，建议定期复查并考虑手术治疗。';
+            invasionLength = '多处';
+            severity = '需要关注';
+            diagnosis = '曲面断层影像分析显示口腔内存在多处需要关注的区域：检测到牙齿填充物（置信度52.13%），种植体（置信度46.24%），以及牙根管治疗痕迹（置信度43.52%）。这些发现提示患者既往接受过较为全面的口腔治疗。建议定期复查，确保填充物完整性、种植体稳定性以及根管治疗效果的持续性。';
             recommendations = [
-                '建议进行详细的口腔检查，评估病变的范围和深度',
-                '考虑行病变切除术',
-                '术后使用抗炎及抗增生药物，预防复发',
-                '注意口腔卫生，避免刺激',
-                '定期复查，监测病变进展'
+                '定期复查牙齿填充物状态，检查是否有脱落、磨损或继发龋',
+                '监测种植体周围组织健康，预防种植体周围炎',
+                '评估根管治疗牙齿的稳定性，必要时进行根尖片复查',
+                '保持良好口腔卫生，使用牙线和漱口水',
+                '建议每6个月进行一次口腔全面检查'
             ];
             break;
 
         case '2.png':
-            invasionLength = '1.5mm';
-            severity = '轻度';
-            diagnosis = '口腔病变区域较小，侵犯范围约1.5mm²，病变组织较薄，周围无明显充血，可能处于静止期，病变生长缓慢或暂时稳定。虽处于静止期但符合手术指征，需通过手术切除以改善口腔健康或预防进展。';
+            invasionLength = '多处';
+            severity = '需要重点关注';
+            diagnosis = '曲面断层影像显示口腔内存在多种病理状况：检测到阻生牙（置信度77.78%），牙齿填充物（置信度59.06%），种植体（置信度48.68%），牙根管治疗（置信度39.96%），以及龋齿（置信度31.76%）。其中阻生牙置信度较高，提示可能存在智齿阻生或其他牙齿萌出异常，需要重点关注。龋齿的检出提示需要及时治疗以防病变进展。';
             recommendations = [
-                '建议进行详细检查，评估病变活动性',
-                '虽处于静止期，但建议考虑手术治疗',
-                '可选择病变切除术，预防进一步发展',
-                '保持口腔清洁',
-                '避免口腔刺激，注意防护'
+                '建议拍摄阻生牙的全景片或CBCT，评估是否需要拔除',
+                '对检出的龋齿进行及时治疗，防止龋坏加深',
+                '检查现有填充物是否需要更换或修复',
+                '评估种植体和根管治疗牙齿的长期稳定性',
+                '加强口腔卫生管理，使用含氟牙膏，定期洁牙',
+                '建议每3-6个月复查一次，密切监测病变进展'
             ];
             break;
 
         case '3.png':
-            invasionLength = '1mm';
-            severity = '轻度';
-            diagnosis = '该口腔病变侵犯范围约1mm²，处于静止期（严重程度低），目前无需手术，建议定期观察（每半年至1年随访，监测病变生长及症状变化）。若未来出现充血加重、组织肥厚或侵犯范围＞2mm²，再考虑干预。';
+            invasionLength = '单处';
+            severity = '良好';
+            diagnosis = '曲面断层影像分析显示口腔内检测到牙齿填充物（置信度54.60%）。填充物位置及形态基本正常，未见明显继发龋或填充物脱落迹象。整体口腔健康状况良好，建议继续保持现有的口腔卫生习惯，定期复查即可。';
             recommendations = [
-                '定期观察，每半年至1年随访一次',
-                '监测病变生长和进展',
-                '保持良好的口腔卫生习惯',
-                '避免刺激性食物',
-                '如出现充血加重或侵犯范围>2mm²时考虑手术'
+                '定期检查填充物边缘密合性，预防继发龋',
+                '保持良好的刷牙习惯，每天至少刷牙两次',
+                '使用牙线清洁牙缝，减少食物残留',
+                '避免过硬食物，防止填充物崩裂',
+                '建议每6-12个月进行一次常规口腔检查'
             ];
             break;
 
         case '4.png':
-            invasionLength = '<1mm';
-            severity = '轻度';
-            diagnosis = '口腔病变范围较小，侵犯范围≤1mm²（侵犯深度浅）。病变组织菲薄，周围充血极轻微，提示处于静止期（病变生长缓慢，甚至暂时停止进展），建议定期观察（每1～2年随访，监测病变生长进展）。若未来出现充血加重、组织增厚或侵犯范围＞2mm²，再评估治疗必要性。';
+            invasionLength = '两处';
+            severity = '需要关注';
+            diagnosis = '曲面断层影像显示口腔内存在两处需要关注的情况：检测到阻生牙（置信度58.15%）和牙齿填充物（置信度55.28%）。阻生牙的存在提示可能有智齿或其他牙齿未能正常萌出，需要评估其对邻牙及咬合的影响。填充物状态基本稳定。建议进一步检查阻生牙的位置和生长方向，必要时考虑拔除。';
             recommendations = [
-                '定期观察，每1-2年随访一次',
-                '目前无需手术干预',
-                '保持良好的口腔卫生',
-                '避免刺激性食物和饮料',
-                '如有症状变化及时就诊'
+                '建议拍摄阻生牙的详细影像（全景片或CBCT），评估拔除必要性',
+                '监测阻生牙对邻牙的影响，预防邻牙龋坏或牙根吸收',
+                '检查填充物的完整性和边缘密合性',
+                '保持良好的口腔卫生，特别注意阻生牙周围清洁',
+                '定期复查，每6个月至1年进行一次口腔检查'
             ];
             break;
             

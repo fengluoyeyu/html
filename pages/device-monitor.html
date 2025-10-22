@@ -3,302 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>系统介绍 - 明眸辨齿</title>
+    <title>设备监控中心 - 明眸辨齿</title>
     <link rel="stylesheet" href="../css/minimal-style.css">
-    <link rel="stylesheet" href="../css/mobile-responsive.css">
     <link rel="stylesheet" href="../css/footer-section.css">
+    <link rel="stylesheet" href="../css/mobile-responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary-blue: #0066cc;
+            --accent-green: #00a651;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --border-light: #e5e5e5;
+            --bg-secondary: #f8f9fa;
+            --gradient-primary: linear-gradient(135deg, #0066cc 0%, #00a6fb 100%);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
+            --shadow-xl: 0 12px 24px rgba(0,0,0,0.15);
         }
         
         body {
+            /* 背景颜色已修改：与系统介绍页面的模型概述部分保持一致 */
+            /* 原背景: var(--bg-secondary) 即 #f8f9fa */
+            /* 新背景: #0f0f0f (与intro.html第153行的.section-model背景色一致) */
+            background: #5e8da5;
+            min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: #000;
-            color: #fff;
-            overflow-x: hidden;
         }
         
-        /* 第一屏 - 关于我们 */
-        .section-about {
+        .monitor-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
             min-height: 100vh;
-            position: relative;
+            padding-top: 70px;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            background: white;
+            border-right: 1px solid var(--border-light);
+            padding: 0;
             display: flex;
             flex-direction: column;
         }
         
-        /* 上半部分 - 图片区域 */
-        .about-image-area {
-            height: 50vh;
-            position: relative;
-            background: #111;
-            overflow: hidden;
+        /* 用户登录区域 */
+        .user-section {
+            padding: 1.5rem;
+            background: var(--gradient-primary);
+            color: white;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
         }
         
-        .about-image-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            color: #666;
-            font-size: 18px;
-        }
-        
-        /* 下半部分 - 内容区域 */
-        .about-content-area {
-            height: 50vh;
-            padding: 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: #000;
-        }
-        
-        .about-title {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-        }
-        
-        .about-text {
-            font-size: 18px;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 800px;
-        }
-        
-        /* 第二屏 - 图片轮播 */
-        .section-gallery {
-            min-height: 100vh;
-            position: relative;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .gallery-container {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .gallery-slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .gallery-slide.active {
-            opacity: 1;
-        }
-        
-        .gallery-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .gallery-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 24px;
-        }
-        
-        /* 轮播指示器 */
-        .gallery-indicators {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 10;
-        }
-        
-        .indicator-dot {
-            width: 12px;
-            height: 12px;
+        .user-avatar {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: white;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+        
+        .user-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-role {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .user-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .sidebar-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .sidebar-link:hover {
+            background: var(--bg-secondary);
+            color: var(--primary-blue);
+        }
+        
+        .sidebar-link.active {
+            background: rgba(0, 102, 204, 0.05);
+            color: var(--primary-blue);
+        }
+        
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-blue);
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            padding: 2rem;
+        }
+        
+        .content-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-secondary);
+        }
+        
+        /* 统计卡片 */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            opacity: 0.05;
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-title {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 102, 204, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .stat-change.positive {
+            color: var(--accent-green);
+            background: rgba(0, 166, 81, 0.1);
+        }
+        
+        .stat-change.negative {
+            color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+        }
+        
+        /* 设备表格 */
+        .device-table-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-add {
+            padding: 0.5rem 1rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .search-box {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            width: 250px;
+        }
+        
+        .device-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .device-table th {
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border-light);
+            font-size: 0.875rem;
+        }
+        
+        .device-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .device-table tr:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .device-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .device-id {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 25px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.online {
+            background: rgba(0, 166, 81, 0.1);
+            color: var(--accent-green);
+        }
+        
+        .status-badge.offline {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        .status-badge.processing {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        
+        .device-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border-light);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        
+        .btn-action:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background: rgba(0, 102, 204, 0.05);
+        }
+        
+        /* 实时监控图表 */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .chart-placeholder {
+            height: 200px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+        
+        /* 活动日志 */
+        .activity-log {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .log-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .log-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.25rem 0.75rem;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.3s;
         }
         
-        .indicator-dot.active {
-            background: #00a6fb;
-            width: 30px;
-            border-radius: 6px;
+        .filter-btn.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
         }
         
-        /* 第三屏 - 模型概述 */
-        .section-model {
-            min-height: 100vh;
-            background: #0f0f0f;
-            padding: 80px 60px;
-            position: relative;
+        .log-list {
+            max-height: 400px;
+            overflow-y: auto;
         }
         
-        .model-header {
-            margin-bottom: 60px;
+        .log-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
         }
         
-        .model-title {
-            font-size: 48px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-        
-        .model-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: start;
-        }
-        
-        /* 左侧内容 */
-        .model-content {
-            padding-right: 40px;
-        }
-        
-        .model-subtitle {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #00a6fb;
-        }
-        
-        .model-description {
-            font-size: 18px;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 30px;
-        }
-        
-        .model-features {
-            list-style: none;
-        }
-        
-        .model-feature {
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.9);
+        .log-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 15px;
-        }
-        
-        .model-feature i {
-            color: #00a6fb;
-            font-size: 20px;
-        }
-        
-        /* 右侧图片网格 */
-        .model-images {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-        
-        .image-row {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .image-row.single {
             justify-content: center;
+            flex-shrink: 0;
         }
         
-        .model-image-box {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.3s;
+        .log-icon.info {
+            background: rgba(0, 102, 204, 0.1);
+            color: var(--primary-blue);
         }
         
-        .model-image-box:hover {
-            transform: translateY(-5px);
+        .log-icon.success {
+            background: rgba(0, 166, 81, 0.1);
+            color: var(--accent-green);
         }
         
-        .model-image-box.large {
-            width: 100%;
-            height: 250px;
+        .log-icon.warning {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
         }
         
-        .model-image-box.small {
+        .log-content {
             flex: 1;
-            height: 200px;
         }
         
-        .model-image-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 16px;
+        .log-message {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
         }
         
-        /* 响应式设计 */
+        .log-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* 内容区域切换 */
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 响应式 */
         @media (max-width: 1024px) {
-            .model-container {
+            .monitor-layout {
                 grid-template-columns: 1fr;
-                gap: 60px;
             }
             
-            .model-content {
-                padding-right: 0;
+            .sidebar {
+                display: none;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
             }
         }
         
         @media (max-width: 768px) {
-            .about-content-area,
-            .section-model {
-                padding: 40px 30px;
+            .stats-row {
+                grid-template-columns: 1fr;
             }
             
-            .about-title,
-            .model-title {
-                font-size: 36px;
-            }
-            
-            .about-text,
-            .model-description {
-                font-size: 16px;
-            }
-            
-            .image-row {
+            .table-actions {
                 flex-direction: column;
+                width: 100%;
             }
             
-            .model-image-box.small {
+            .search-box {
                 width: 100%;
+            }
+            
+            .device-table {
+                display: block;
+                overflow-x: auto;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 透明导航栏 -->
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="nav-wrapper">
             <a href="../index.html" class="nav-logo">
@@ -308,128 +577,1030 @@
             <div class="nav-links">
                 <a href="intro.html" class="nav-item">系统介绍</a>
                 <a href="detection.html" class="nav-item">AI检测</a>
-                <a href="device-monitor.html" class="nav-item">设备监控</a>
+                <a href="device-monitor.html" class="nav-item active">设备监控</a>
             </div>
         </div>
     </nav>
 
-    <!-- 第一屏：关于我们 -->
-    <section class="section-about">
-        <!-- 上半部分：图片区域 -->
-        <div class="about-image-area">
-            <div class="about-image-placeholder">
-                    <img src="../images/three.jpg" alt="关于我们" 
-                    style="width: 100%; height: 100%; object-fit: cover;">
-                
-            </div>
-        </div>
-        
-        <!-- 下半部分：内容区域 -->
-        <div class="about-content-area">
-            <h2 class="about-title">关于我们</h2>
-            <div class="about-text">
-                <p>AI智齿卫是一家专注于口腔医疗人工智能技术研发的创新团队。我们致力于通过先进的深度学习技术，为口腔疾病的早期筛查和精准诊断提供智能化解决方案。</p>
-                <br>
-                <p>基于多模型融合技术，我们开发了业界领先的曲面断层口腔健康智能筛查系统，该系统能够快速、准确地识别口腔问题区域，大幅提升诊断效率，让优质的口腔医疗服务惠及更多患者。</p>
-                <br>
-                <p>我们的使命是"明眸辨齿，AI守护每一口牙齿"，通过科技创新推动医疗健康事业发展，为建设健康中国贡献力量。</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 第二屏：图片轮播 -->
-    <section class="section-gallery">
-        <div class="gallery-container">
-            <!-- 轮播图片 -->
-            <div class="gallery-slide active" id="gallery-slide-1">
-                <img src="../images/intro2.jpg" alt="展示1" class="gallery-image">
-            </div>
-            <div class="gallery-slide" id="gallery-slide-2">
-                <img src="../images/intro1.jpg" alt="展示2" class="gallery-image">
-            </div>
-            <div class="gallery-slide" id="gallery-slide-3">
-                <img src="../images/intro3.png" alt="展示3" class="gallery-image">
-            </div>
-            <div class="gallery-slide" id="gallery-slide-4">
-                <img src="../images/intro4.jpg" alt="展示4" class="gallery-image">
-            </div>>
-            
-            <!-- 指示器 -->
-            <div class="gallery-indicators">
-                <span class="indicator-dot active" data-slide="0"></span>
-                <span class="indicator-dot" data-slide="1"></span>
-                <span class="indicator-dot" data-slide="2"></span>
-                <span class="indicator-dot" data-slide="3"></span>
-            </div>
-        </div>
-    </section>
-
-    <!-- 第三屏：模型概述 -->
-    <section class="section-model">
-        <div class="model-header">
-            <h2 class="model-title">模型概述</h2>
-        </div>
-        
-        <div class="model-container">
-            <!-- 左侧：内容 -->
-            <div class="model-content">
-                <h3 class="model-subtitle">多模型融合口腔检测系统</h3>
-                <p class="model-description">
-                    我们的AI系统基于多模型融合深度学习技术开发，采用先进的曲面断层分析技术，能够精准识别和定位口腔健康问题区域。系统经过大规模医疗数据训练，准确率达到临床应用标准。
-                </p>
-                
-                <ul class="model-features">
-                    <li class="model-feature">
-                        <i class="fas fa-check-circle"></i>
-                        <span>高精度识别：准确率超过95%，满足临床诊断需求</span>
-                    </li>
-                    <li class="model-feature">
-                        <i class="fas fa-check-circle"></i>
-                        <span>实时检测：毫秒级响应，支持实时图像分析</span>
-                    </li>
-                    <li class="model-feature">
-                        <i class="fas fa-check-circle"></i>
-                        <span>多模态融合：支持多种医学影像格式输入</span>
-                    </li>
-                    <li class="model-feature">
-                        <i class="fas fa-check-circle"></i>
-                        <span>持续优化：模型自动更新，性能不断提升</span>
-                    </li>
-                    <li class="model-feature">
-                        <i class="fas fa-check-circle"></i>
-                        <span>边缘部署：支持本地化部署，保护数据隐私</span>
-                    </li>
-                </ul>
+    <div class="monitor-layout">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <!-- 用户登录信息 -->
+            <div class="user-section">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name">管理员</div>
+                <div class="user-role">系统管理员</div>
+                <div class="user-status">
+                    <span class="status-dot"></span>
+                    <span>在线</span>
+                </div>
             </div>
             
-            <!-- 右侧：图片网格 -->
-            <div class="model-images">
-                <!-- 第一行：一张大图 -->
-                <div class="image-row single">
-                    <div class="model-image-box large">
-                            <img src="../images/zhanshi.jpg" alt="PaddleX模型架构" 
-                            style="width: 100%; height: 100%;">
+            <!-- 侧边栏菜单 -->
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="javascript:void(0)" class="sidebar-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>监控仪表板</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="javascript:void(0)" class="sidebar-link" data-section="devices">
+                        <i class="fas fa-desktop"></i>
+                        <span>设备管理</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="javascript:void(0)" class="sidebar-link" data-section="performance">
+                        <i class="fas fa-chart-line"></i>
+                        <span>性能分析</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="javascript:void(0)" class="sidebar-link" data-section="logs">
+                        <i class="fas fa-file-alt"></i>
+                        <span>系统日志</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="javascript:void(0)" class="sidebar-link" data-section="alerts">
+                        <i class="fas fa-bell"></i>
+                        <span>告警管理</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="javascript:void(0)" class="sidebar-link" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>系统设置</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 监控仪表板 -->
+            <div id="dashboard" class="content-section active">
+                <div class="content-header">
+                    <h1 class="page-title">监控仪表板</h1>
+                    <p class="page-subtitle">实时监控和管理所有接入设备的状态</p>
+                </div>
+
+                <!-- 统计卡片 -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">总设备数</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="totalDevices">12</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+2 本周新增</span>
                     </div>
                 </div>
                 
-                <!-- 第二行：两张小图 -->
-                <div class="image-row">
-                    <div class="model-image-box small">
-                        <div class="model-image-placeholder">
-                                <img src="../images/jiegou1.png" alt="PaddleX模型架构" 
-                                style="width: 100%; height: 100%;">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">在线设备</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-wifi"></i>
                         </div>
                     </div>
-                    <div class="model-image-box small">
-                        <div class="model-image-placeholder">
-                                <img src="../images/jiegou2.jpg" alt="PaddleX模型架构" 
-                                style="width: 100%; height: 100%;"> 
+                    <div class="stat-value" id="onlineDevices">10</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-check"></i>
+                        <span>83.3% 在线率</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">今日检测</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="todayDetections">156</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+23% 较昨日</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">平均响应</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">235<span style="font-size: 1rem;">ms</span></div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>-15ms 优化</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设备列表 -->
+            <div class="device-table-section">
+                <div class="table-header">
+                    <h2 class="table-title">设备列表</h2>
+                    <div class="table-actions">
+                        <input type="text" class="search-box" placeholder="搜索设备...">
+                        <button class="btn-add">
+                            <i class="fas fa-plus"></i>
+                            添加设备
+                        </button>
+                    </div>
+                </div>
+                
+                <table class="device-table">
+                    <thead>
+                        <tr>
+                            <th>设备信息</th>
+                            <th>状态</th>
+                            <th>IP地址</th>
+                            <th>型号</th>
+                            <th>最后活动</th>
+                            <th>CPU使用率</th>
+                            <th>内存使用</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deviceTableBody">
+                        <tr>
+                            <td>
+                                <div class="device-name">检测终端-01</div>
+                                <div class="device-id">ID: DEV001</div>
+                            </td>
+                            <td>
+                                <span class="status-badge online">
+                                    <span class="status-dot"></span>
+                                    在线
+                                </span>
+                            </td>
+                            <td>192.168.1.101</td>
+                            <td>PD-X100</td>
+                            <td>2分钟前</td>
+                            <td>45%</td>
+                            <td>2.3/8 GB</td>
+                            <td>
+                                <div class="device-actions">
+                                    <button class="btn-action" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn-action" title="配置">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="btn-action" title="重启">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="device-name">检测终端-02</div>
+                                <div class="device-id">ID: DEV002</div>
+                            </td>
+                            <td>
+                                <span class="status-badge processing">
+                                    <span class="status-dot"></span>
+                                    处理中
+                                </span>
+                            </td>
+                            <td>192.168.1.102</td>
+                            <td>PD-X100</td>
+                            <td>刚刚</td>
+                            <td>78%</td>
+                            <td>4.1/8 GB</td>
+                            <td>
+                                <div class="device-actions">
+                                    <button class="btn-action" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn-action" title="配置">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="btn-action" title="重启">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="device-name">边缘服务器-01</div>
+                                <div class="device-id">ID: SRV001</div>
+                            </td>
+                            <td>
+                                <span class="status-badge online">
+                                    <span class="status-dot"></span>
+                                    在线
+                                </span>
+                            </td>
+                            <td>192.168.1.201</td>
+                            <td>ES-2000</td>
+                            <td>5分钟前</td>
+                            <td>32%</td>
+                            <td>12.5/32 GB</td>
+                            <td>
+                                <div class="device-actions">
+                                    <button class="btn-action" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn-action" title="配置">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="btn-action" title="重启">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="device-name">移动检测站-01</div>
+                                <div class="device-id">ID: MOB001</div>
+                            </td>
+                            <td>
+                                <span class="status-badge offline">
+                                    <span class="status-dot"></span>
+                                    离线
+                                </span>
+                            </td>
+                            <td>192.168.1.150</td>
+                            <td>MD-500</td>
+                            <td>2小时前</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>
+                                <div class="device-actions">
+                                    <button class="btn-action" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn-action" title="配置">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="btn-action" title="重启">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 实时监控图表 -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-area"></i> CPU使用率趋势
+                    </h3>
+                    <div class="chart-placeholder">
+                        <canvas id="cpuChart"></canvas>
+                        <span>CPU监控图表</span>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-bar"></i> 检测任务分布
+                    </h3>
+                    <div class="chart-placeholder">
+                        <canvas id="taskChart"></canvas>
+                        <span>任务分布图表</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 活动日志 -->
+            <div class="activity-log">
+                <div class="log-header">
+                    <h2 class="log-title">系统活动日志</h2>
+                    <div class="log-filters">
+                        <button class="filter-btn active">全部</button>
+                        <button class="filter-btn">信息</button>
+                        <button class="filter-btn">警告</button>
+                        <button class="filter-btn">错误</button>
+                    </div>
+                </div>
+                
+                <div class="log-list" id="logList">
+                    <div class="log-item">
+                        <div class="log-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="log-content">
+                            <div class="log-message">设备 DEV001 成功完成图像检测任务</div>
+                            <div class="log-time">2分钟前</div>
+                        </div>
+                    </div>
+                    
+                    <div class="log-item">
+                        <div class="log-icon info">
+                            <i class="fas fa-info"></i>
+                        </div>
+                        <div class="log-content">
+                            <div class="log-message">系统开始执行定期维护任务</div>
+                            <div class="log-time">15分钟前</div>
+                        </div>
+                    </div>
+                    
+                    <div class="log-item">
+                        <div class="log-icon warning">
+                            <i class="fas fa-exclamation"></i>
+                        </div>
+                        <div class="log-content">
+                            <div class="log-message">设备 MOB001 连接超时，已自动重试</div>
+                            <div class="log-time">1小时前</div>
+                        </div>
+                    </div>
+                    
+                    <div class="log-item">
+                        <div class="log-icon success">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="log-content">
+                            <div class="log-message">模型版本更新至 v1.2.0</div>
+                            <div class="log-time">2小时前</div>
+                        </div>
+                    </div>
+                    
+                    <div class="log-item">
+                        <div class="log-icon info">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="log-content">
+                            <div class="log-message">管理员登录系统</div>
+                            <div class="log-time">3小时前</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+            </div><!-- 监控仪表板结束 -->
+            
+            <!-- 设备管理 -->
+            <div id="devices" class="content-section">
+                <div class="content-header">
+                    <h1 class="page-title">设备管理</h1>
+                    <p class="page-subtitle">管理和配置所有检测设备</p>
+                </div>
+                
+                <!-- 设备操作栏 -->
+                <div class="device-toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; background: white; padding: 1rem; border-radius: 12px;">
+                    <div style="display: flex; gap: 1rem;">
+                        <button style="padding: 0.75rem 1.5rem; background: var(--gradient-primary); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            <i class="fas fa-plus"></i> 添加设备
+                        </button>
+                        <button style="padding: 0.75rem 1.5rem; background: white; color: var(--text-primary); border: 1px solid var(--border-light); border-radius: 8px; cursor: pointer;">
+                            <i class="fas fa-upload"></i> 批量导入
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <select style="padding: 0.5rem; border: 1px solid var(--border-light); border-radius: 8px;">
+                            <option>全部类型</option>
+                            <option>检测终端</option>
+                            <option>边缘服务器</option>
+                            <option>移动设备</option>
+                        </select>
+                        <input type="text" placeholder="搜索设备..." style="padding: 0.5rem; border: 1px solid var(--border-light); border-radius: 8px; width: 200px;">
+                    </div>
+                </div>
+                
+                <!-- 设备卡片网格 -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- 设备卡片1 -->
+                    <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">检测终端-01</h3>
+                                <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(0, 166, 81, 0.1); color: var(--accent-green); border-radius: 20px; font-size: 0.875rem;">
+                                    <i class="fas fa-circle" style="font-size: 0.5rem;"></i> 在线
+                                </span>
+                            </div>
+                            <i class="fas fa-desktop" style="font-size: 2rem; color: var(--primary-blue); opacity: 0.5;"></i>
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.8;">
+                            <p><strong>IP地址：</strong>192.168.1.101</p>
+                            <p><strong>型号：</strong>PD-X100</p>
+                            <p><strong>位置：</strong>一楼检测室</p>
+                            <p><strong>上次维护：</strong>7天前</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button style="flex: 1; padding: 0.5rem; background: var(--primary-blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+                                <i class="fas fa-cog"></i> 配置
+                            </button>
+                            <button style="flex: 1; padding: 0.5rem; background: white; color: var(--text-primary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+                                <i class="fas fa-chart-line"></i> 监控
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 设备卡片2 -->
+                    <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">边缘服务器-01</h3>
+                                <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(0, 166, 81, 0.1); color: var(--accent-green); border-radius: 20px; font-size: 0.875rem;">
+                                    <i class="fas fa-circle" style="font-size: 0.5rem;"></i> 在线
+                                </span>
+                            </div>
+                            <i class="fas fa-server" style="font-size: 2rem; color: var(--primary-blue); opacity: 0.5;"></i>
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.8;">
+                            <p><strong>IP地址：</strong>192.168.1.201</p>
+                            <p><strong>型号：</strong>ES-2000</p>
+                            <p><strong>位置：</strong>机房A区</p>
+                            <p><strong>负载状态：</strong>正常</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button style="flex: 1; padding: 0.5rem; background: var(--primary-blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+                                <i class="fas fa-cog"></i> 配置
+                            </button>
+                            <button style="flex: 1; padding: 0.5rem; background: white; color: var(--text-primary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+                                <i class="fas fa-chart-line"></i> 监控
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 添加更多设备的占位符 -->
+                    <div style="background: white; border-radius: 12px; padding: 3rem; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--border-light); cursor: pointer;">
+                        <i class="fas fa-plus-circle" style="font-size: 3rem; color: var(--border-light); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-secondary);">添加新设备</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 性能分析 -->
+            <div id="performance" class="content-section">
+                <div class="content-header">
+                    <h1 class="page-title">性能分析</h1>
+                    <p class="page-subtitle">系统性能指标和分析报告</p>
+                </div>
+                
+                <!-- 性能概览卡片 -->
+                <div class="stats-row" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">平均响应时间</span>
+                            <div class="stat-icon" style="background: rgba(0, 166, 81, 0.1); color: var(--accent-green);">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">235<span style="font-size: 1rem;">ms</span></div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>优化15%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">系统负载</span>
+                            <div class="stat-icon" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">62<span style="font-size: 1rem;">%</span></div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-check"></i>
+                            <span>正常范围</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">网络吞吐量</span>
+                            <div class="stat-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">1.2<span style="font-size: 1rem;">GB/s</span></div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>带宽充足</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">错误率</span>
+                            <div class="stat-icon" style="background: rgba(220, 53, 69, 0.1); color: #dc3545;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">0.02<span style="font-size: 1rem;">%</span></div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>低于阈值</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 性能图表 -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3 class="chart-title">
+                            <i class="fas fa-chart-line"></i> 系统资源使用趋势
+                        </h3>
+                        <div class="chart-placeholder" style="height: 300px;">
+                            <div style="padding: 20px;">
+                                <div style="margin-bottom: 15px;">
+                                    <span style="color: #0066cc;">● CPU使用率</span>
+                                    <span style="margin-left: 20px; color: #00a651;">● 内存使用率</span>
+                                    <span style="margin-left: 20px; color: #ffc107;">● 磁盘I/O</span>
+                                </div>
+                                <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(0,102,204,0.05), transparent);">
+                                    图表加载中...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3 class="chart-title">
+                            <i class="fas fa-chart-pie"></i> 资源分配比例
+                        </h3>
+                        <div class="chart-placeholder" style="height: 300px;">
+                            <div style="padding: 20px; text-align: center;">
+                                <div style="display: inline-block; text-align: left; margin-top: 30px;">
+                                    <div style="margin: 10px 0;"><span style="display: inline-block; width: 20px; height: 10px; background: #0066cc; margin-right: 10px;"></span>AI检测模块 (45%)</div>
+                                    <div style="margin: 10px 0;"><span style="display: inline-block; width: 20px; height: 10px; background: #00a651; margin-right: 10px;"></span>数据处理 (25%)</div>
+                                    <div style="margin: 10px 0;"><span style="display: inline-block; width: 20px; height: 10px; background: #ffc107; margin-right: 10px;"></span>系统服务 (20%)</div>
+                                    <div style="margin: 10px 0;"><span style="display: inline-block; width: 20px; height: 10px; background: #6c757d; margin-right: 10px;"></span>其他 (10%)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 性能优化建议 -->
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm); margin-top: 2rem;">
+                    <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">优化建议</h3>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="padding: 1rem; background: rgba(0, 166, 81, 0.05); border-left: 3px solid var(--accent-green); border-radius: 6px;">
+                            <strong style="color: var(--accent-green);">✓ 良好</strong>
+                            <p style="margin: 0.5rem 0 0; color: var(--text-secondary);">系统响应时间保持在优秀水平，无需调整</p>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(255, 193, 7, 0.05); border-left: 3px solid #ffc107; border-radius: 6px;">
+                            <strong style="color: #ffc107;">⚠ 建议</strong>
+                            <p style="margin: 0.5rem 0 0; color: var(--text-secondary);">建议增加缓存容量以提升数据访问速度</p>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(0, 102, 204, 0.05); border-left: 3px solid var(--primary-blue); border-radius: 6px;">
+                            <strong style="color: var(--primary-blue);">ℹ 提示</strong>
+                            <p style="margin: 0.5rem 0 0; color: var(--text-secondary);">下次维护窗口：2025年2月1日 02:00-04:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 系统日志 -->
+            <div id="logs" class="content-section">
+                <div class="content-header">
+                    <h1 class="page-title">系统日志</h1>
+                    <p class="page-subtitle">查看和管理系统运行日志</p>
+                </div>
+                
+                <!-- 日志过滤和搜索 -->
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="filter-btn active">全部</button>
+                            <button class="filter-btn">信息</button>
+                            <button class="filter-btn">警告</button>
+                            <button class="filter-btn">错误</button>
+                            <button class="filter-btn">调试</button>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="datetime-local" style="padding: 0.5rem; border: 1px solid var(--border-light); border-radius: 6px;">
+                            <span>至</span>
+                            <input type="datetime-local" style="padding: 0.5rem; border: 1px solid var(--border-light); border-radius: 6px;">
+                            <button style="padding: 0.5rem 1rem; background: var(--primary-blue); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                <i class="fas fa-search"></i> 搜索
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 日志列表 -->
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm);">
+                    <div style="max-height: 600px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--border-light);">
+                                    <th style="padding: 1rem; text-align: left;">时间</th>
+                                    <th style="padding: 1rem; text-align: left;">级别</th>
+                                    <th style="padding: 1rem; text-align: left;">模块</th>
+                                    <th style="padding: 1rem; text-align: left;">消息</th>
+                                    <th style="padding: 1rem; text-align: left;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--border-light);">
+                                    <td style="padding: 1rem; font-size: 0.875rem;">2025-08-22 21:45:23</td>
+                                    <td style="padding: 1rem;">
+                                        <span class="status-badge online" style="font-size: 0.75rem;">信息</span>
+                                    </td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">AI检测</td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">成功完成批量图像检测任务</td>
+                                    <td style="padding: 1rem;">
+                                        <button class="btn-action" title="查看详情">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-light);">
+                                    <td style="padding: 1rem; font-size: 0.875rem;">2025-08-22 21:42:15</td>
+                                    <td style="padding: 1rem;">
+                                        <span class="status-badge processing" style="font-size: 0.75rem;">警告</span>
+                                    </td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">系统监控</td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">设备DEV003内存使用率超过80%</td>
+                                    <td style="padding: 1rem;">
+                                        <button class="btn-action" title="查看详情">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-light);">
+                                    <td style="padding: 1rem; font-size: 0.875rem;">2025-08-22 21:38:07</td>
+                                    <td style="padding: 1rem;">
+                                        <span class="status-badge offline" style="font-size: 0.75rem;">错误</span>
+                                    </td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">网络连接</td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">设备MOB001连接超时</td>
+                                    <td style="padding: 1rem;">
+                                        <button class="btn-action" title="查看详情">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-light);">
+                                    <td style="padding: 1rem; font-size: 0.875rem;">2025-08-22 21:35:44</td>
+                                    <td style="padding: 1rem;">
+                                        <span class="status-badge online" style="font-size: 0.75rem;">信息</span>
+                                    </td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">用户管理</td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">管理员登录系统</td>
+                                    <td style="padding: 1rem;">
+                                        <button class="btn-action" title="查看详情">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-light);">
+                                    <td style="padding: 1rem; font-size: 0.875rem;">2025-08-22 21:30:12</td>
+                                    <td style="padding: 1rem;">
+                                        <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(108, 117, 125, 0.1); color: #6c757d; border-radius: 20px; font-size: 0.75rem;">调试</span>
+                                    </td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">系统</td>
+                                    <td style="padding: 1rem; font-size: 0.875rem;">清理临时文件完成</td>
+                                    <td style="padding: 1rem;">
+                                        <button class="btn-action" title="查看详情">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 分页 -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light);">
+                        <span style="color: var(--text-secondary); font-size: 0.875rem;">显示 1-5 条，共 127 条</span>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button style="padding: 0.5rem 1rem; background: white; border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer;">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button style="padding: 0.5rem 1rem; background: var(--primary-blue); color: white; border: none; border-radius: 6px;">1</button>
+                            <button style="padding: 0.5rem 1rem; background: white; border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer;">2</button>
+                            <button style="padding: 0.5rem 1rem; background: white; border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer;">3</button>
+                            <button style="padding: 0.5rem 1rem; background: white; border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer;">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 告警管理 -->
+            <div id="alerts" class="content-section">
+                <div class="content-header">
+                    <h1 class="page-title">告警管理</h1>
+                    <p class="page-subtitle">配置和管理系统告警规则</p>
+                </div>
+                
+                <!-- 告警统计 -->
+                <div class="stats-row" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">活动告警</span>
+                            <div class="stat-icon" style="background: rgba(220, 53, 69, 0.1); color: #dc3545;">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-exclamation"></i>
+                            <span>需要处理</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">今日告警</span>
+                            <div class="stat-icon" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>较昨日-5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">已处理</span>
+                            <div class="stat-icon" style="background: rgba(0, 166, 81, 0.1); color: var(--accent-green);">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">9</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-check"></i>
+                            <span>75%处理率</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">规则数量</span>
+                            <div class="stat-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-change">
+                            <i class="fas fa-info-circle"></i>
+                            <span>18个激活</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 活动告警列表 -->
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.25rem;">活动告警</h3>
+                        <button style="padding: 0.5rem 1rem; background: var(--primary-blue); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-sync"></i> 刷新
+                        </button>
+                    </div>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="padding: 1rem; background: rgba(220, 53, 69, 0.05); border-left: 4px solid #dc3545; border-radius: 6px;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <span style="color: #dc3545; font-weight: 600;">严重</span>
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">2分钟前</span>
+                                    </div>
+                                    <p style="margin: 0.5rem 0; font-weight: 600;">设备MOB001连接丢失</p>
+                                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">移动检测站MOB001已离线超过30分钟，请检查网络连接</p>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-action" title="查看详情"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-action" title="处理"><i class="fas fa-check"></i></button>
+                                    <button class="btn-action" title="忽略"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 1rem; background: rgba(255, 193, 7, 0.05); border-left: 4px solid #ffc107; border-radius: 6px;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <span style="color: #ffc107; font-weight: 600;">警告</span>
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">15分钟前</span>
+                                    </div>
+                                    <p style="margin: 0.5rem 0; font-weight: 600;">CPU使用率过高</p>
+                                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">设备DEV002的CPU使用率达到85%，可能影响处理性能</p>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-action" title="查看详情"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-action" title="处理"><i class="fas fa-check"></i></button>
+                                    <button class="btn-action" title="忽略"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 1rem; background: rgba(255, 193, 7, 0.05); border-left: 4px solid #ffc107; border-radius: 6px;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <span style="color: #ffc107; font-weight: 600;">警告</span>
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">1小时前</span>
+                                    </div>
+                                    <p style="margin: 0.5rem 0; font-weight: 600;">存储空间不足</p>
+                                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">服务器SRV001磁盘使用率达到78%，建议清理或扩容</p>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-action" title="查看详情"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-action" title="处理"><i class="fas fa-check"></i></button>
+                                    <button class="btn-action" title="忽略"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 告警规则配置 -->
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.25rem;">告警规则</h3>
+                        <button style="padding: 0.5rem 1rem; background: var(--gradient-primary); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-plus"></i> 添加规则
+                        </button>
+                    </div>
+                    
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-light);">
+                                <th style="padding: 1rem; text-align: left;">规则名称</th>
+                                <th style="padding: 1rem; text-align: left;">类型</th>
+                                <th style="padding: 1rem; text-align: left;">阈值</th>
+                                <th style="padding: 1rem; text-align: left;">状态</th>
+                                <th style="padding: 1rem; text-align: left;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-light);">
+                                <td style="padding: 1rem;">CPU使用率监控</td>
+                                <td style="padding: 1rem;">性能</td>
+                                <td style="padding: 1rem;">> 80%</td>
+                                <td style="padding: 1rem;">
+                                    <span class="status-badge online">激活</span>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <div class="device-actions">
+                                        <button class="btn-action" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-action" title="暂停"><i class="fas fa-pause"></i></button>
+                                        <button class="btn-action" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-light);">
+                                <td style="padding: 1rem;">设备离线检测</td>
+                                <td style="padding: 1rem;">连接</td>
+                                <td style="padding: 1rem;">> 5分钟</td>
+                                <td style="padding: 1rem;">
+                                    <span class="status-badge online">激活</span>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <div class="device-actions">
+                                        <button class="btn-action" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-action" title="暂停"><i class="fas fa-pause"></i></button>
+                                        <button class="btn-action" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-light);">
+                                <td style="padding: 1rem;">内存使用监控</td>
+                                <td style="padding: 1rem;">性能</td>
+                                <td style="padding: 1rem;">> 90%</td>
+                                <td style="padding: 1rem;">
+                                    <span class="status-badge offline">暂停</span>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <div class="device-actions">
+                                        <button class="btn-action" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-action" title="启用"><i class="fas fa-play"></i></button>
+                                        <button class="btn-action" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 系统设置 -->
+            <div id="settings" class="content-section">
+                <div class="content-header">
+                    <h1 class="page-title">系统设置</h1>
+                    <p class="page-subtitle">配置系统参数和用户权限</p>
+                </div>
+                
+                <!-- 设置选项卡 -->
+                <div style="background: white; border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden;">
+                    <div style="display: flex; border-bottom: 2px solid var(--border-light);">
+                        <button class="settings-tab active" style="padding: 1rem 2rem; background: white; border: none; cursor: pointer; font-weight: 600; color: var(--primary-blue); border-bottom: 2px solid var(--primary-blue); margin-bottom: -2px;">常规设置</button>
+                        <button class="settings-tab" style="padding: 1rem 2rem; background: white; border: none; cursor: pointer; color: var(--text-secondary);">用户管理</button>
+                        <button class="settings-tab" style="padding: 1rem 2rem; background: white; border: none; cursor: pointer; color: var(--text-secondary);">系统维护</button>
+                        <button class="settings-tab" style="padding: 1rem 2rem; background: white; border: none; cursor: pointer; color: var(--text-secondary);">备份恢复</button>
+                    </div>
+                    
+                    <!-- 常规设置 -->
+                    <div class="settings-content" style="padding: 2rem;">
+                        <div style="max-width: 800px;">
+                            <h3 style="margin-bottom: 1.5rem;">常规设置</h3>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">系统名称</label>
+                                <input type="text" value="明眸辨齿检测系统" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 6px;">
+                            </div>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">时区设置</label>
+                                <select style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 6px;">
+                                    <option>UTC+8:00 北京时间</option>
+                                    <option>UTC+0:00 格林威治时间</option>
+                                    <option>UTC-5:00 美东时间</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">语言设置</label>
+                                <select style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 6px;">
+                                    <option>简体中文</option>
+                                    <option>English</option>
+                                    <option>繁體中文</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">通知设置</label>
+                                <div style="display: grid; gap: 1rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" checked>
+                                        <span>启用邮件通知</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" checked>
+                                        <span>启用系统消息推送</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox">
+                                        <span>启用短信通知（需配置短信服务）</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">数据保留期限</label>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <input type="number" value="90" style="width: 100px; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 6px;">
+                                    <span>天</span>
+                                </div>
+                                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">超过保留期限的历史数据将被自动清理</p>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem;">
+                                <button style="padding: 0.75rem 2rem; background: var(--gradient-primary); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                    <i class="fas fa-save"></i> 保存设置
+                                </button>
+                                <button style="padding: 0.75rem 2rem; background: white; color: var(--text-primary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer;">
+                                    <i class="fas fa-undo"></i> 恢复默认
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 系统信息 -->
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm); margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem;">系统信息</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">系统版本</p>
+                            <p style="font-weight: 600;">v2.1.0</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">AI模型版本</p>
+                            <p style="font-weight: 600;">v1.2.0</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">最后更新时间</p>
+                            <p style="font-weight: 600;">2025-08-20 14:30:00</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">授权状态</p>
+                            <p style="font-weight: 600; color: var(--accent-green);">已授权</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <!-- 页脚半屏 -->
     <section class="footer-section">
@@ -447,7 +1618,6 @@
         </div>
     </section>
 
-    <script src="../js/mobile-nav.js"></script>
     <script>
         // 导航栏滚动效果
         window.addEventListener('scroll', function() {
@@ -458,33 +1628,141 @@
                 navbar.classList.remove('scrolled');
             }
         });
-
-        // 图片轮播功能
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.gallery-slide');
-        const indicators = document.querySelectorAll('.indicator-dot');
-
-        function showSlide(index) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            indicators.forEach(dot => dot.classList.remove('active'));
+        
+        // 初始化设备监控
+        document.addEventListener('DOMContentLoaded', function() {
+            // 侧边栏菜单切换和内容区域切换
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const contentSections = document.querySelectorAll('.content-section');
             
-            slides[index].classList.add('active');
-            indicators[index].classList.add('active');
-            currentSlide = index;
-        }
-
-        // 自动轮播
-        setInterval(() => {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }, 4000);
-
-        // 点击指示器切换
-        indicators.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                showSlide(index);
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // 记录当前滚动位置
+                    const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    // 更新侧边栏激活状态
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 切换内容区域
+                    const targetSection = this.getAttribute('data-section');
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetSection) {
+                            section.classList.add('active');
+                        }
+                    });
+                    
+                    // 使用history API更新URL，不会触发页面滚动
+                    if (history.replaceState) {
+                        history.replaceState(null, null, '#' + targetSection);
+                    }
+                    
+                    // 恢复滚动位置
+                    setTimeout(() => {
+                        window.scrollTo(0, currentScrollPosition);
+                    }, 0);
+                });
             });
+            
+            // 处理页面加载时的hash
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                const targetLink = document.querySelector(`[data-section="${hash}"]`);
+                if (targetLink) {
+                    targetLink.click();
+                }
+            }
+            
+            // 日志过滤
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 模拟实时数据更新
+            function updateStats() {
+                // 更新在线设备数
+                const onlineCount = Math.floor(Math.random() * 3 + 9);
+                document.getElementById('onlineDevices').textContent = onlineCount;
+                
+                // 更新今日检测数
+                const detections = parseInt(document.getElementById('todayDetections').textContent);
+                document.getElementById('todayDetections').textContent = detections + Math.floor(Math.random() * 3);
+                
+                // 更新设备状态
+                updateDeviceStatus();
+            }
+            
+            // 更新设备状态
+            function updateDeviceStatus() {
+                const statusBadges = document.querySelectorAll('.status-badge');
+                statusBadges.forEach((badge, index) => {
+                    if (Math.random() > 0.8 && index !== 3) {
+                        badge.className = 'status-badge';
+                        const statuses = ['online', 'processing', 'offline'];
+                        const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                        badge.classList.add(randomStatus);
+                        
+                        const statusText = {
+                            'online': '在线',
+                            'processing': '处理中',
+                            'offline': '离线'
+                        };
+                        badge.innerHTML = `<span class="status-dot"></span> ${statusText[randomStatus]}`;
+                    }
+                });
+            }
+            
+            // 添加新日志
+            function addNewLog() {
+                const logTypes = [
+                    { icon: 'success', iconClass: 'fa-check', message: '设备完成检测任务' },
+                    { icon: 'info', iconClass: 'fa-info', message: '系统状态正常' },
+                    { icon: 'warning', iconClass: 'fa-exclamation', message: '设备响应延迟' }
+                ];
+                
+                const randomLog = logTypes[Math.floor(Math.random() * logTypes.length)];
+                const logList = document.getElementById('logList');
+                
+                const newLog = document.createElement('div');
+                newLog.className = 'log-item';
+                newLog.innerHTML = `
+                    <div class="log-icon ${randomLog.icon}">
+                        <i class="fas ${randomLog.iconClass}"></i>
+                    </div>
+                    <div class="log-content">
+                        <div class="log-message">${randomLog.message}</div>
+                        <div class="log-time">刚刚</div>
+                    </div>
+                `;
+                
+                logList.insertBefore(newLog, logList.firstChild);
+                
+                // 限制日志数量
+                while (logList.children.length > 10) {
+                    logList.removeChild(logList.lastChild);
+                }
+            }
+            
+            // 定时更新
+            setInterval(updateStats, 5000);
+            setInterval(addNewLog, 10000);
+            
+            // 初始化图表占位
+            const cpuCanvas = document.getElementById('cpuChart');
+            const taskCanvas = document.getElementById('taskChart');
+            
+            // 这里可以集成Chart.js等图表库来显示真实图表
+            console.log('Device monitor initialized');
         });
     </script>
+    <script src="../js/mobile-nav.js"></script>
 </body>
 </html>
